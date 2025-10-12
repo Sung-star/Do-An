@@ -17,8 +17,7 @@ use App\Http\Controllers\ReviewController;
 // ===============================
 
 // Trang chủ
-Route::get('/', [HomeController::class, 'index'])->name('home')->name('homepage');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
 // Đăng ký / đăng nhập client
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
