@@ -1,24 +1,14 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
 
-echo "🚀 Bắt đầu deploy Laravel trên Railway..."
-
-# Nếu chưa có .env, tạo mới từ .env.example
-if [ ! -f .env ]; then
-  cp .env.example .env
-fi
-
-# Cài các thư viện PHP
-composer install --no-dev --optimize-autoloader
-
-
-# Dọn sạch cache (quan trọng)
-php artisan config:clear
+echo "🧹 Clearing old caches..."
 php artisan route:clear
+php artisan config:clear
+php artisan cache:clear
 php artisan view:clear
 
-# Build lại cache config mới sau khi Railway inject env
+echo "⚙️ Rebuilding caches..."
+php artisan route:cache
 php artisan config:cache
 
-# Chạy Laravel server
-php artisan serve --host=0.0.0.0 --port=$PORT
+echo "🚀 Starting Laravel app..."
+php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
