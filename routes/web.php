@@ -2,14 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\{
-    BrandController, Brand2Controller, CategoryController, Category2Controller,
-    DashboardController, ProductController, Product2Controller,
-    UserController, CustomerController, OrderController, ReportController,
+    BrandController,
+    Brand2Controller,
+    CategoryController,
+    Category2Controller,
+    DashboardController,
+    ProductController,
+    Product2Controller,
+    UserController,
+    CustomerController,
+    OrderController,
+    ReportController,
     OrderitemController
 };
 use App\Http\Controllers\Client\{
-    HomeController, CartController, CategoryClientController, ProductClientController,
-    BrandClientController, AboutController, CheckoutController, CouponController
+    HomeController,
+    CartController,
+    CategoryClientController,
+    ProductClientController,
+    BrandClientController,
+    AboutController,
+    CheckoutController,
+    CouponController
 };
 use App\Http\Controllers\ReviewController;
 
@@ -18,7 +32,9 @@ use App\Http\Controllers\ReviewController;
 // ===============================
 
 // Trang chủ
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Trang chủ
+Route::get('/', [HomeController::class, 'index'])->name('home')->name('homepage');
+
 
 // Giỏ hàng
 Route::post('/cart/update-qty/{id}', [CartController::class, 'updateQty'])->name('cart.updateQty');
