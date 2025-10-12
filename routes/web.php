@@ -18,6 +18,7 @@ use App\Http\Controllers\ReviewController;
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 // Đăng ký / đăng nhập client
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -83,7 +84,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/resetpass/{id}', [UserController::class, 'handleReset'])->name('ad.reset');
 });
 
-// Admin area
+// Admin area (cần đăng nhập)
 Route::middleware(['auth'])->prefix('admin')->name('ad.')->group(function () {
 
     // Dashboard & logout
@@ -112,7 +113,7 @@ Route::middleware(['auth'])->prefix('admin')->name('ad.')->group(function () {
         Route::delete('/{id}/delete', [CategoryController::class, 'delete'])->name('delete');
     });
 
-    // Category2 CRUD
+    // Category2 CRUD (đã chuẩn hóa thành ad.cate2.*)
     Route::prefix('categories-2')->name('cate2.')->middleware('roles:1')->group(function () {
         Route::get('/', [Category2Controller::class, 'index'])->name('index');
         Route::get('/create', [Category2Controller::class, 'create'])->name('create');
