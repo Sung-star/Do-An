@@ -101,13 +101,14 @@
         }
 
 
-       <style>
-.carousel-inner img {
-    width: 100%;
-    height: 450px;             /* chiều cao cố định của banner */
-    object-fit: cover;         /* lấp đầy khung, cắt phần thừa */
-}
-</style>
+        <style>.carousel-inner img {
+            width: 100%;
+            height: 450px;
+            /* chiều cao cố định của banner */
+            object-fit: cover;
+            /* lấp đầy khung, cắt phần thừa */
+        }
+    </style>
 
     </style>
 </head>
@@ -116,7 +117,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('homepage') }}">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Hoài Sung Shop">
                 <span class="ms-2 text-white fw-bold">Hoài Sung Shop</span>
             </a>
@@ -131,7 +132,7 @@
                 <!-- Menu -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('homepage') }}"><i class="bi bi-house-door"></i>
+                        <a class="nav-link active" href="{{ route('home') }}"><i class="bi bi-house-door"></i>
                             Home</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Thông Tin</a></li>
