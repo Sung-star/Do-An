@@ -11,13 +11,16 @@ fi
 # Cài các thư viện PHP
 composer install --no-dev --optimize-autoloader
 
-# Dọn cache
+# Dọn cache cũ
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
-# Build cache config mới
+# 🟢 Load lại biến môi trường và cache cấu hình
 php artisan config:cache
 
-# Chạy Laravel server (Railway sẽ tự gán biến $PORT)
+# 🟢 Chạy migrate để đảm bảo DB hoạt động (bạn có thể bỏ nếu sợ)
+php artisan migrate --force || true
+
+# Chạy server
 php artisan serve --host=0.0.0.0 --port=$PORT
