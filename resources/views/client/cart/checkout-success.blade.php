@@ -143,7 +143,7 @@
 
                 <!-- Actions -->
                 <div class="text-center">
-                    <a href="{{ route('homepage') }}" class="btn btn-primary btn-lg px-5 me-3"
+                    <a href="{{ route('home') }}" class="btn btn-primary btn-lg px-5 me-3"
                         style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
                         🏠 Về trang chủ
                     </a>
