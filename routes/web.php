@@ -112,7 +112,7 @@ Route::get('/cartcheckout', function () {
 Route::get('/category/{id}', [CategoryClientController::class, 'detail'])->name('category');
 Route::get('/brand/{id}', [BrandClientController::class, 'detail'])->name('brand');
 
-Route::get('/san-pham', [ProductController::class, 'index'])->name('client.products.index');
+// Route::get('/san-pham', [ProductController::class, 'index'])->name('client.products.index');
 
 Route::prefix('products')->name('client.products.')->group(function () {
     Route::get('/', [ProductClientController::class, 'index'])->name('index');
