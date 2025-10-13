@@ -133,7 +133,7 @@ Route::get('/san-pham', [ProductController::class, 'index'])->name('client.produ
 Route::prefix('products')->name('client.products.')->group(function () {
     Route::get('/', [ProductClientController::class, 'index'])->name('index');
     Route::get('/detail/{id}', [ProductClientController::class, 'detail'])->name('detail');
-    Route::get('/search', [ProductClientController::class, 'search'])->name('client.products.search');
+    Route::get('/search', [ProductClientController::class, 'search'])->name('search');
 });
 
 
@@ -199,41 +199,41 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 
     Route::name('cate.')->middleware('roles:1')->group(function () {
-        Route::get('/categories', [CategoryController::class, 'index'])->name('cate.index');
-        Route::get('/categories/create', [CategoryController::class, 'create'])->name('cate.create');
-        Route::post('/categories/store', [CategoryController::class, 'store'])->name('cate.store');
-        Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('cate.edit');
-        Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('cate.update');
-        Route::delete('/categories/{id}/delete', [CategoryController::class, 'delete'])->name('cate.delete');
+        Route::get('/categories', [CategoryController::class, 'index'])->name('index');
+        Route::get('/categories/create', [CategoryController::class, 'create'])->name('create');
+        Route::post('/categories/store', [CategoryController::class, 'store'])->name('store');
+        Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
+        Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/categories/{id}/delete', [CategoryController::class, 'delete'])->name('delete');
     });
 
     //Eloquent ORM - Categories
     Route::name('cate2.')->middleware('roles:1')->group(function () {
-        Route::get('/categories-2', [Category2Controller::class, 'index'])->name('cate2.index');
-        Route::get('/categories-2/create', [Category2Controller::class, 'create'])->name('cate2.create');
-        Route::post('/categories-2/store', [Category2Controller::class, 'store'])->name('cate2.store');
-        Route::get('/categories-2/{id}/edit', [Category2Controller::class, 'edit'])->name('cate2.edit');
-        Route::post('/categories-2/{id}', [Category2Controller::class, 'update'])->name('cate2.update');
-        Route::delete('/categories-2/{id}/delete', [Category2Controller::class, 'delete'])->name('cate2.delete');
+        Route::get('/categories-2', [Category2Controller::class, 'index'])->name('index');
+        Route::get('/categories-2/create', [Category2Controller::class, 'create'])->name('create');
+        Route::post('/categories-2/store', [Category2Controller::class, 'store'])->name('store');
+        Route::get('/categories-2/{id}/edit', [Category2Controller::class, 'edit'])->name('edit');
+        Route::post('/categories-2/{id}', [Category2Controller::class, 'update'])->name('update');
+        Route::delete('/categories-2/{id}/delete', [Category2Controller::class, 'delete'])->name('delete');
     });
 
     Route::name('brand.')->middleware('roles:1')->group(function () {
-        Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
-        Route::get('/brands/create', [BrandController::class, 'create'])->name('brand.create');
-        Route::post('/brands/store', [BrandController::class, 'store'])->name('brand.store');
-        Route::get('/brands/{id}/edit', [BrandController::class, 'edit'])->name('brand.edit');
-        Route::post('/brands/{id}', [BrandController::class, 'update'])->name('brand.update');
-        Route::delete('/brands/{id}/delete', [BrandController::class, 'delete'])->name('brand.delete');
+        Route::get('/brands', [BrandController::class, 'index'])->name('index');
+        Route::get('/brands/create', [BrandController::class, 'create'])->name('create');
+        Route::post('/brands/store', [BrandController::class, 'store'])->name('store');
+        Route::get('/brands/{id}/edit', [BrandController::class, 'edit'])->name('edit');
+        Route::post('/brands/{id}', [BrandController::class, 'update'])->name('update');
+        Route::delete('/brands/{id}/delete', [BrandController::class, 'delete'])->name('delete');
     });
 
     //Eloquent ORM - Brands
     Route::name('brand2.')->middleware('roles:1')->group(function () {
-        Route::get('/brands-2', [Brand2Controller::class, 'index'])->name('brand2.index');
-        Route::get('/brands-2/create', [Brand2Controller::class, 'create'])->name('brand2.create');
-        Route::post('/brands-2/store', [Brand2Controller::class, 'store'])->name('brand2.store');
-        Route::get('/brands-2/{id}/edit', [Brand2Controller::class, 'edit'])->name('brand2.edit');
-        Route::post('/brands-2/{id}', [Brand2Controller::class, 'update'])->name('brand2.update');
-        Route::delete('/brands-2/{id}/delete', [Brand2Controller::class, 'delete'])->name('brand2.delete');
+        Route::get('/brands-2', [Brand2Controller::class, 'index'])->name('index');
+        Route::get('/brands-2/create', [Brand2Controller::class, 'create'])->name('create');
+        Route::post('/brands-2/store', [Brand2Controller::class, 'store'])->name('store');
+        Route::get('/brands-2/{id}/edit', [Brand2Controller::class, 'edit'])->name('edit');
+        Route::post('/brands-2/{id}', [Brand2Controller::class, 'update'])->name('update');
+        Route::delete('/brands-2/{id}/delete', [Brand2Controller::class, 'delete'])->name('delete');
     });
 
     Route::get('/products', [ProductController::class, 'index'])->name('pro.index');
