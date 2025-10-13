@@ -35,7 +35,7 @@ Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])
     ->name('products.reviews.store');
 
 //check login client
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index']);
 });
 
@@ -114,7 +114,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/cart/update-qty/{id}', [CartController::class, 'updateQty'])->name('cart.updateQty');
 
-Route::get('/', [HomeController::class, 'index'])->name('homepage');
+Route::get('/Trang-chu', [HomeController::class, 'index'])->name('homepage');
 Route::post('/cartadd/{id}', [CartController::class, 'add'])->name('cartadd');
 Route::get('/cartdel/{id}', [CartController::class, 'del'])->name('cartdel');
 Route::post('/cartsave', [CartController::class, 'save'])->name('cartsave');
