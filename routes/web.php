@@ -249,3 +249,13 @@ Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
     Route::post('/products-2/{id}', [Product2Controller::class, 'update'])->name('pro2.update');
     Route::post('/products-2/{id}/delete', [Product2Controller::class, 'delete'])->name('pro2.delete');
 });
+// ---- Aliases without 'ad.' for users (user.*) ----
+Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/users/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('/users/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/users/{id}/delete', [UserController::class, 'delete'])->name('user.delete');
+});
+
