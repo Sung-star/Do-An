@@ -11,8 +11,6 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
-    <!-- Fallback CSS if asset missing -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -47,7 +45,7 @@
 
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="{{ route('home') }}">My Admin</a>
+        <a class="navbar-brand ps-3" href="{{ route('homepage') }}">My Admin</a>
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button>
@@ -110,7 +108,7 @@
                             Đơn hàng
                         </a>
                         <hr class="sidebar-divider">
-                        <a class="nav-link" href="{{ route('ad.user.index') }}">
+                        <a class="nav-link" href="{{ route('user.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
                             Người dùng
                         </a>

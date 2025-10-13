@@ -1,0 +1,63 @@
+services:
+  - type: web
+    name: web-ban-hang
+    env: docker
+    plan: free
+    region: singapore
+    branch: main
+    autoDeploy: true
+    envVars:
+      - key: APP_NAME
+        value: Laravel
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        value: base64:zomMxK/FBG2kg/vSWjadSF+MpPLquC2Zhgn4XYSAfZ4=
+      - key: APP_DEBUG
+        value: true
+      - key: APP_URL
+        value: https://web-ban-hang-wn2b.onrender.com
+
+      # PostgreSQL Database (Render)
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: dpg-d3kf5undiees73ci46s0-a
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: mydb1_3ihv
+      - key: DB_USERNAME
+        value: mydb1_3ihv_user
+      - key: DB_PASSWORD
+        value: Yp5H30k6sV7znGz4ZeoDqn4393qxk8n8
+      - key: DB_SSLMODE
+        value: require
+
+      # Các config khác
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: debug
+      - key: SESSION_DRIVER
+        value: file
+      - key: SESSION_LIFETIME
+        value: 120
+
+      # Mail config
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USERNAME
+        value: xuanta142005@gmail.com
+      - key: MAIL_PASSWORD
+        value: sfjw kezo aweu sbdl
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        value: xuanta142005@gmail.com
+      - key: MAIL_FROM_NAME
+        value: Laravel

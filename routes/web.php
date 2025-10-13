@@ -1,4 +1,5 @@
 <?php
+// trigger artisan cache clear
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\Brand2Controller;

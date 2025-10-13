@@ -1,35 +1,27 @@
-# Dockerfile - Build Laravel app for Railway
-FROM php:8.3-apache
+# PHP với FPM
+FROM php:8.2-fpm
 
-# Install required PHP extensions
+# Cài đặt các package cần thiết
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    git zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev curl libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Install Node.js (v18)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs
-
-# Copy project files
+# Sao chép project
 WORKDIR /var/www/html
 COPY . .
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader && npm install && npm run build
+# Cài composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Set permissions for Laravel
-RUN chmod -R 777 storage bootstrap/cache
+# Cài các thư viện PHP
+RUN composer install --no-dev --optimize-autoloader
 
-# Configure Apache
-RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
-RUN a2enmod rewrite
-COPY ./docker/apache/laravel.conf /etc/apache2/sites-available/000-default.conf
+# Phân quyền
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
 
-# Expose port
-EXPOSE 8080
+# Cổng web
+EXPOSE 8000
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Khởi chạy Laravel (tự migrate DB)
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000

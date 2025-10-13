@@ -16,7 +16,7 @@ class AboutController extends Controller
     {
         // Données de l'entreprise
         $companyData = [
-            'name' => 'Shop E-Commerce Vietnam',
+            'name' => 'Shop Minh Rờm Vietnam',
             'founded' => 2020,
             'employees' => 2,
             'customers' => 50000,

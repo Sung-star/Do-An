@@ -5,6 +5,7 @@
     <section class="py-3 bg-white">
         <div class="container">
             <form method="GET" action="{{ url()->current() }}" class="row g-2 align-items-center">
+                {{-- Danh mục --}}
                 <div class="col-auto">
                     <select name="cateid" class="form-select" onchange="this.form.submit()">
                         <option value="">Tất cả danh mục</option>
@@ -17,6 +18,7 @@
                     </select>
                 </div>
 
+                {{-- Thương hiệu --}}
                 <div class="col-auto">
                     <select name="brandid" class="form-select" onchange="this.form.submit()">
                         <option value="">Tất cả thương hiệu</option>
@@ -28,6 +30,7 @@
                     </select>
                 </div>
 
+                {{-- Lọc theo giá --}}
                 <div class="col-auto">
                     <select name="price_range" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Lọc theo giá --</option>
@@ -42,6 +45,7 @@
                     </select>
                 </div>
 
+                {{-- Sắp xếp --}}
                 <div class="col-auto">
                     <select name="sort" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Sắp xếp --</option>
@@ -84,15 +88,16 @@
                                 </div>
                                 <div class="card-body text-center">
                                     <h6 class="fw-semibold text-dark mb-2">{{ $item->proname ?? $item->name }}</h6>
-                                    <p class="text-danger fw-bold mb-0">{{ number_format($item->price ?? 0) }}đ</p>
-                                </div>
-                                <div class="rating">
-                                    @php $avg = round($item->reviews()->avg('rating')); @endphp
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <span class="{{ $i <= $avg ? 'text-warning' : 'text-muted' }}">★</span>
-                                    @endfor
-                                </div>
+                                    <p class="text-danger fw-bold mb-1">{{ number_format($item->price ?? 0) }}đ</p>
 
+                                    {{-- ⭐ Rating --}}
+                                    @php $avg = round($item->reviews()->avg('rating')); @endphp
+                                    <div class="star-rating mb-2">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <span class="{{ $i <= $avg ? 'text-warning' : 'text-muted' }}">★</span>
+                                        @endfor
+                                    </div>
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -123,7 +128,15 @@
                                 </div>
                                 <div class="card-body text-center">
                                     <h6 class="fw-semibold text-dark mb-2">{{ $item->proname ?? $item->name }}</h6>
-                                    <p class="text-danger fw-bold mb-0">{{ number_format($item->price ?? 0) }}đ</p>
+                                    <p class="text-danger fw-bold mb-1">{{ number_format($item->price ?? 0) }}đ</p>
+
+                                    {{-- ⭐ Rating (đã thêm) --}}
+                                    @php $avg = round($item->reviews()->avg('rating')); @endphp
+                                    <div class="star-rating mb-2">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <span class="{{ $i <= $avg ? 'text-warning' : 'text-muted' }}">★</span>
+                                        @endfor
+                                    </div>
                                 </div>
                             </div>
                         </a>
@@ -143,6 +156,7 @@
 
     {{-- CSS --}}
     <style>
+        /* Hiệu ứng phóng to ảnh */
         .hover-scale {
             transition: transform 0.4s ease;
         }
@@ -151,17 +165,41 @@
             transform: scale(1.05);
         }
 
+        /* Card sản phẩm */
         .product-card {
             transition: box-shadow 0.3s ease, transform 0.3s ease;
+            border-radius: 12px;
         }
 
         .product-card:hover {
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
         }
 
+        /* Tiêu đề sản phẩm */
         .card-body h6 {
-            min-height: 40px;
+            min-height: 42px;
+            font-size: 0.95rem;
+        }
+
+        /* ⭐ Đánh giá sao */
+        .star-rating {
+            font-size: 0.9rem;
+        }
+
+        .star-rating span {
+            margin-right: 2px;
+            font-size: 1rem;
+        }
+
+        .star-rating .text-warning {
+            color: #ffc107 !important;
+            /* Vàng tươi */
+        }
+
+        .star-rating .text-muted {
+            color: #d1d1d1 !important;
+            /* Xám nhạt */
         }
     </style>
 @endsection
