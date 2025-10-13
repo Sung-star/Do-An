@@ -101,7 +101,7 @@
         }
 
 
-        <style>.carousel-inner img {
+        .carousel-inner img {
             width: 100%;
             height: 450px;
             /* chiều cao cố định của banner */
@@ -147,7 +147,7 @@
                 </form>
 
                 <!-- Cart -->
-                <a class="btn btn-light position-relative" href="{{ route('cartshow') }}">
+                <a class="btn btn-light position-relative" href="{{ route('cart.show') }}">
                     <i class="bi bi-cart3"></i>
                     <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle">
                         {{ count(Session::get('cart', [])) }}

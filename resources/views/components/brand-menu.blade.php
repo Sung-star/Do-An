@@ -3,6 +3,6 @@
 <ul class="dropdown-menu" aria-labelledby="navbarDropdownBrand">
     {{-- đọc biến $brands (truyền từ AppServiceProvider hoặc controller) --}}
     @foreach ($brands as $item)
-        <li><a class="dropdown-item" href="{{ route('brand', ['id' => $item->id]) }}">{{ $item->brandname }}</a></li>
+        <li><a class="dropdown-item" href="{{ route('brand.detail', ['id' => $item->id]) }}">{{ $item->brandname }}</a></li>
     @endforeach
 </ul>
