@@ -5,7 +5,7 @@ php artisan route:clear
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
-
+php artisan storage:link
 echo "⚙️ Rebuilding caches..."
 php artisan route:cache
 php artisan config:cache
