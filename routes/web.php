@@ -22,7 +22,8 @@ Route::get('/home', function () { return redirect()->route('homepage'); })->name
 // ===============================
 
 // Trang chủ
-
+// Trang "Giới thiệu"
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // Đăng ký / đăng nhập client
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
