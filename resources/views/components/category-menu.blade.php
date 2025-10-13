@@ -3,7 +3,7 @@
 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
     {{-- đọc biến $categories (trong component) --}}
     @foreach ($categories as $item)
-        <li><a class="dropdown-item" href="{{ route('category.detail', ['id' => $item->cateid]) }}">{{ $item->catename }}</a>
+        <li><a class="dropdown-item" href="{{ route('category', ['id' => $item->cateid]) }}">{{ $item->catename }}</a>
         </li>
     @endforeach
 </ul>

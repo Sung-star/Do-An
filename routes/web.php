@@ -1,265 +1,260 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\Brand2Controller;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\Category2Controller;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\Product2Controller;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\{
-    BrandController, Brand2Controller, CategoryController, Category2Controller,
-    DashboardController, ProductController, Product2Controller,
-    UserController, CustomerController, OrderController, ReportController, OrderitemController
-};
-use App\Http\Controllers\Client\{
-    HomeController, CartController, CategoryClientController, ProductClientController,
-    BrandClientController, AboutController, CheckoutController, CouponController, AuthController
-};
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Client\CategoryClientController;
+use App\Http\Controllers\Client\ProductClientController;
+use App\Http\Controllers\Client\BrandClientController;
+use App\Http\Controllers\Client\AboutController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\CouponController;
 use App\Http\Controllers\ReviewController;
 
-// ===============================
-// CLIENT ROUTES
+use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Client\AuthController;
 
-// ---- Aliases for homepage/home to avoid missing route errors ----
-Route::get('/', [HomeController::class, 'index'])->name('homepage');
-Route::get('/home', function () { return redirect()->route('homepage'); })->name('home');
 
-// ===============================
-
-// Trang chủ
-// Trang "Giới thiệu"
-Route::get('/about', [AboutController::class, 'index'])->name('about');
-
-// Đăng ký / đăng nhập client
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
+
+// Xử lý gửi dữ liệu đăng ký
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+// đánh giá sao
+Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])
+    ->name('products.reviews.store');
+
+//check login client
+Route::middleware('auth')->group(function() {
+    Route::get('/checkout', [CheckoutController::class, 'index']);
+});
+
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Giỏ hàng
-Route::prefix('cart')->group(function () {
-    Route::post('/update-qty/{id}', [CartController::class, 'updateQty'])->name('cart.updateQty');
-    Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
-    Route::get('/delete/{id}', [CartController::class, 'del'])->name('cart.del');
-    Route::post('/save', [CartController::class, 'save'])->name('cart.save');
-    Route::get('/show', fn() => view('client.cart.cartshow'))->name('cart.show');
-    Route::get('/checkout', fn() => view('client.cart.checkout'))->name('cart.checkout');
+
+
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('/report/revenue', [ReportController::class, 'revenue'])->name('report.revenue');
 });
 
-// Danh mục / thương hiệu / sản phẩm
 
 
+Route::middleware(['web', 'auth'])
+    ->prefix('admin')
+    ->name('ad.')
+    ->group(function () {
+        // Resource CRUD cho đơn hàng
+        Route::resource('orders', OrderController::class);
+
+        // Route tùy chỉnh để cập nhật trạng thái
+        Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
+    });
 
 
-// ---- Compatibility single routes expected by Blade components ----
-Route::get('/category/{id}', [CategoryClientController::class, 'detail'])->name('category'); // legacy name
-Route::get('/brand/{id}', [BrandClientController::class, 'detail'])->name('brand'); // legacy name
+// ============================================
+// THÊM VÀO CUỐI FILE routes/web.php
+// ============================================
 
-Route::prefix('products')->name('client.products.')->group(function () {
-    
-    Route::get('/detail/{id}', [ProductClientController::class, 'detail'])->name('detail');
-    Route::get('/search', [ProductClientController::class, 'search'])->name('search');
-    Route::post('/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-});
-
-// About pages
-Route::prefix('about')->group(function () {
-    
-    Route::get('/team', [AboutController::class, 'team'])->name('about.team');
-    Route::get('/contact', [AboutController::class, 'contact'])->name('about.contact');
-});
-
-// Checkout
+// ROUTES CHO CHECKOUT - THANH TOÁN
 Route::prefix('checkout')->name('checkout.')->group(function () {
-    
+    // Trang điền thông tin đặt hàng
+    Route::get('/', [CheckoutController::class, 'index'])->name('index');
+
+    // Xử lý đặt hàng (submit form)
     Route::post('/process', [CheckoutController::class, 'process'])->name('process');
-    Route::get('/momo-payment/{orderId}', [CheckoutController::class, 'momoPayment'])->name('momo-payment');
+
+    // Trang hiển thị QR MoMo
+    Route::get('/momo-payment/{orderId}', [CheckoutController::class, 'momoPayment'])
+        ->name('momo-payment');
+
+
+    // Xác nhận đã thanh toán MoMo
     Route::post('/confirm-momo/{orderId}', [CheckoutController::class, 'confirmMomoPayment'])->name('confirm-momo');
+
+    // Kiểm tra trạng thái thanh toán (AJAX)
     Route::get('/check-payment/{orderId}', [CheckoutController::class, 'checkPaymentStatus'])->name('check-payment-status');
+
+    // Trang đặt hàng thành công
     Route::get('/success/{orderId}', [CheckoutController::class, 'success'])->name('success');
 });
 
-// Coupon
+// ROUTES CHO MÃ GIẢM GIÁ
 Route::prefix('coupon')->name('coupon.')->group(function () {
+    // Áp dụng mã giảm giá
     Route::post('/apply', [CouponController::class, 'apply'])->name('apply');
+
+    // Xóa mã giảm giá
     Route::post('/remove', [CouponController::class, 'remove'])->name('remove');
 });
 
+// Routes for the About pages
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/about/team', [AboutController::class, 'team'])->name('about.team');
+Route::get('/about/contact', [AboutController::class, 'contact'])->name('about.contact');
 
-Route::get('/category/{id}', [CategoryController::class, 'detail'])->name('category.detail');
+Route::get('/admin', function () {
+    return view('layout.admin');
+})->middleware('auth');
 
-// ===============================
-// ADMIN ROUTES
-// ===============================
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Đăng nhập / reset mật khẩu admin
-Route::prefix('admin')->group(function () {
-    Route::get('/login', [UserController::class, 'login'])->name('ad.login');
-    Route::post('/login', [UserController::class, 'loginpost'])->name('ad.loginpost');
-    Route::get('/forgotpass', [UserController::class, 'forgotpassform'])->name('ad.forgotpass');
-    Route::post('/forgotpass', [UserController::class, 'forgotpass'])->name('ad.forgotpasspost');
-    Route::get('/resetpass/{id}', [UserController::class, 'showResetForm'])->name('ad.reset.form');
-    Route::post('/resetpass/{id}', [UserController::class, 'handleReset'])->name('ad.reset');
-});
+Route::post('/cart/update-qty/{id}', [CartController::class, 'updateQty'])->name('cart.updateQty');
 
-// Admin area (cần đăng nhập)
-Route::middleware(['auth'])->prefix('admin')->name('ad.')->group(function () {
+Route::get('/', [HomeController::class, 'index'])->name('homepage');
+Route::post('/cartadd/{id}', [CartController::class, 'add'])->name('cartadd');
+Route::get('/cartdel/{id}', [CartController::class, 'del'])->name('cartdel');
+Route::post('/cartsave', [CartController::class, 'save'])->name('cartsave');
+Route::get('/cartshow', function () {
+    return view('client.cart.cartshow');
+})->name('cartshow');
+Route::get('/cartcheckout', function () {
+    return view('client.cart.checkout');
+})->name('checkout');
 
-    // Dashboard & logout
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('/changepass', [UserController::class, 'showChangePassForm'])->name('changepass.form');
-    Route::post('/changepass', [UserController::class, 'changepass'])->name('changepass');
+Route::get('/category/{id}', [CategoryClientController::class, 'detail'])->name('category');
+Route::get('/brand/{id}', [BrandClientController::class, 'detail'])->name('brand');
 
-    // Báo cáo
-    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
-    Route::get('/report/revenue', [ReportController::class, 'revenue'])->name('report.revenue');
+Route::get('/san-pham', [ProductController::class, 'index'])->name('client.products.index');
 
-    // Customer / Orders / Order Items
-    Route::resource('customers', CustomerController::class);
-    Route::resource('orders', OrderController::class);
-    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
-    Route::resource('orderitems', OrderitemController::class);
-
-    // Category CRUD
-    Route::prefix('categories')->name('cate.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [CategoryController::class, 'create'])->name('create');
-        Route::post('/store', [CategoryController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
-        Route::post('/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/{id}/delete', [CategoryController::class, 'delete'])->name('delete');
-    });
-
-    // Category2 CRUD (đã chuẩn hóa thành ad.cate2.*)
-    Route::prefix('categories-2')->name('cate2.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [Category2Controller::class, 'create'])->name('create');
-        Route::post('/store', [Category2Controller::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [Category2Controller::class, 'edit'])->name('edit');
-        Route::post('/{id}', [Category2Controller::class, 'update'])->name('update');
-        Route::delete('/{id}/delete', [Category2Controller::class, 'delete'])->name('delete');
-    });
-
-    // Brand CRUD
-    Route::prefix('brands')->name('brand.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [BrandController::class, 'create'])->name('create');
-        Route::post('/store', [BrandController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [BrandController::class, 'edit'])->name('edit');
-        Route::post('/{id}', [BrandController::class, 'update'])->name('update');
-        Route::delete('/{id}/delete', [BrandController::class, 'delete'])->name('delete');
-    });
-
-    // Brand2 CRUD
-    Route::prefix('brands-2')->name('brand2.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [Brand2Controller::class, 'create'])->name('create');
-        Route::post('/store', [Brand2Controller::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [Brand2Controller::class, 'edit'])->name('edit');
-        Route::post('/{id}', [Brand2Controller::class, 'update'])->name('update');
-        Route::delete('/{id}/delete', [Brand2Controller::class, 'delete'])->name('delete');
-    });
-
-    // Product CRUD
-    Route::prefix('products')->name('pro.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [ProductController::class, 'create'])->name('create');
-        Route::post('/store', [ProductController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('edit');
-        Route::post('/{id}', [ProductController::class, 'update'])->name('update');
-        Route::post('/{id}/delete', [ProductController::class, 'delete'])->name('delete');
-    });
-
-    // Product2 CRUD
-    Route::prefix('products-2')->name('pro2.')->middleware('roles:1')->group(function () {
-        
-        Route::get('/create', [Product2Controller::class, 'create'])->name('create');
-        Route::post('/store', [Product2Controller::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [Product2Controller::class, 'edit'])->name('edit');
-        Route::post('/{id}', [Product2Controller::class, 'update'])->name('update');
-        Route::post('/{id}/delete', [Product2Controller::class, 'delete'])->name('delete');
-    });
-
-    // User
-    Route::get('/users', [UserController::class, 'index'])->name('user.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
+Route::prefix('products')->name('client.products.')->group(function () {
+    Route::get('/', [ProductClientController::class, 'index'])->name('index');
+    Route::get('/detail/{id}', [ProductClientController::class, 'detail'])->name('detail');
+    Route::get('/search', [ProductClientController::class, 'search'])->name('client.products.search');
 });
 
 
-// ---- Aliases without 'ad.' prefix for categories-2 (to match views using cate2.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
-    Route::get('/categories-2', [Category2Controller::class, 'index'])->name('cate2.index');
-    Route::get('/categories-2/create', [Category2Controller::class, 'create'])->name('cate2.create');
-    Route::post('/categories-2/store', [Category2Controller::class, 'store'])->name('cate2.store');
-    Route::get('/categories-2/{id}/edit', [Category2Controller::class, 'edit'])->name('cate2.edit');
-    Route::post('/categories-2/{id}', [Category2Controller::class, 'update'])->name('cate2.update');
-    Route::delete('/categories-2/{id}/delete', [Category2Controller::class, 'delete'])->name('cate2.delete');
+Route::get('/admin/login', [UserController::class, 'login'])->name('ad.login');
+Route::post('/admin/login', [UserController::class, 'loginpost'])->name('ad.loginpost');
+
+Route::get('/admin/forgotpass', [UserController::class, 'forgotpassform'])->name('ad.forgotpass');
+Route::post('/admin/forgotpass', [UserController::class, 'forgotpass'])->name('ad.forgotpasspost');
+
+Route::get('/admin/resetpass/{id}', [UserController::class, 'showResetForm'])->name('ad.reset.form');
+Route::post('/admin/resetpass/{id}', [UserController::class, 'handleReset'])->name('ad.reset');
+
+
+
+
+Route::prefix('ad')->as('ad.')->middleware(['auth', 'roles:1'])->group(function () {
+    Route::resource('customers', \App\Http\Controllers\Admin\CustomerController::class);
+});
+
+
+
+Route::prefix('ad')->as('ad.')->middleware(['auth', 'roles:1'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+
+Route::prefix('ad')->middleware(['auth', 'roles:1'])->name('ad.')->group(function () {
+    Route::resource('orderitems', \App\Http\Controllers\Admin\OrderitemController::class);
 });
 
 
 
 
-// ---- Aliases without 'ad.' for categories (cate.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
-    Route::get('/categories', [CategoryController::class, 'index'])->name('cate.index');
-    Route::get('/categories/create', [CategoryController::class, 'create'])->name('cate.create');
-    Route::post('/categories/store', [CategoryController::class, 'store'])->name('cate.store');
-    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('cate.edit');
-    Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('cate.update');
-    Route::delete('/categories/{id}/delete', [CategoryController::class, 'delete'])->name('cate.delete');
-});
 
 
 
-// ---- Aliases without 'ad.' for brands (brand.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
-    Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
-    Route::get('/brands/create', [BrandController::class, 'create'])->name('brand.create');
-    Route::post('/brands/store', [BrandController::class, 'store'])->name('brand.store');
-    Route::get('/brands/{id}/edit', [BrandController::class, 'edit'])->name('brand.edit');
-    Route::post('/brands/{id}', [BrandController::class, 'update'])->name('brand.update');
-    Route::delete('/brands/{id}/delete', [BrandController::class, 'delete'])->name('brand.delete');
-});
 
 
 
-// ---- Aliases without 'ad.' for brands-2 (brand2.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
-    Route::get('/brands-2', [Brand2Controller::class, 'index'])->name('brand2.index');
-    Route::get('/brands-2/create', [Brand2Controller::class, 'create'])->name('brand2.create');
-    Route::post('/brands-2/store', [Brand2Controller::class, 'store'])->name('brand2.store');
-    Route::get('/brands-2/{id}/edit', [Brand2Controller::class, 'edit'])->name('brand2.edit');
-    Route::post('/brands-2/{id}', [Brand2Controller::class, 'update'])->name('brand2.update');
-    Route::delete('/brands-2/{id}/delete', [Brand2Controller::class, 'delete'])->name('brand2.delete');
-});
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::resource('admin/products', ProductController::class)->names([
+        'index' => 'product.index',
+        'create' => 'product.create',
+        'store' => 'product.store',
+        'show' => 'product.show',
+        'edit' => 'product.edit',
+        'update' => 'product.update',
+        'destroy' => 'product.destroy',
+    ]);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('ad.dashboard');
+
+    Route::name('ad.')->group(function () {
+        Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+        // Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+        // Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::get('/changepass', [UserController::class, 'showChangePassForm'])->name('changepass.form');
+        Route::post('/changepass', [UserController::class, 'changepass'])->name('changepass');
+    });
 
 
+    Route::name('cate.')->middleware('roles:1')->group(function () {
+        Route::get('/categories', [CategoryController::class, 'index'])->name('cate.index');
+        Route::get('/categories/create', [CategoryController::class, 'create'])->name('cate.create');
+        Route::post('/categories/store', [CategoryController::class, 'store'])->name('cate.store');
+        Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('cate.edit');
+        Route::post('/categories/{id}', [CategoryController::class, 'update'])->name('cate.update');
+        Route::delete('/categories/{id}/delete', [CategoryController::class, 'delete'])->name('cate.delete');
+    });
 
-// ---- Aliases without 'ad.' for products (pro.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
+    //Eloquent ORM - Categories
+    Route::name('cate2.')->middleware('roles:1')->group(function () {
+        Route::get('/categories-2', [Category2Controller::class, 'index'])->name('cate2.index');
+        Route::get('/categories-2/create', [Category2Controller::class, 'create'])->name('cate2.create');
+        Route::post('/categories-2/store', [Category2Controller::class, 'store'])->name('cate2.store');
+        Route::get('/categories-2/{id}/edit', [Category2Controller::class, 'edit'])->name('cate2.edit');
+        Route::post('/categories-2/{id}', [Category2Controller::class, 'update'])->name('cate2.update');
+        Route::delete('/categories-2/{id}/delete', [Category2Controller::class, 'delete'])->name('cate2.delete');
+    });
+
+    Route::name('brand.')->middleware('roles:1')->group(function () {
+        Route::get('/brands', [BrandController::class, 'index'])->name('brand.index');
+        Route::get('/brands/create', [BrandController::class, 'create'])->name('brand.create');
+        Route::post('/brands/store', [BrandController::class, 'store'])->name('brand.store');
+        Route::get('/brands/{id}/edit', [BrandController::class, 'edit'])->name('brand.edit');
+        Route::post('/brands/{id}', [BrandController::class, 'update'])->name('brand.update');
+        Route::delete('/brands/{id}/delete', [BrandController::class, 'delete'])->name('brand.delete');
+    });
+
+    //Eloquent ORM - Brands
+    Route::name('brand2.')->middleware('roles:1')->group(function () {
+        Route::get('/brands-2', [Brand2Controller::class, 'index'])->name('brand2.index');
+        Route::get('/brands-2/create', [Brand2Controller::class, 'create'])->name('brand2.create');
+        Route::post('/brands-2/store', [Brand2Controller::class, 'store'])->name('brand2.store');
+        Route::get('/brands-2/{id}/edit', [Brand2Controller::class, 'edit'])->name('brand2.edit');
+        Route::post('/brands-2/{id}', [Brand2Controller::class, 'update'])->name('brand2.update');
+        Route::delete('/brands-2/{id}/delete', [Brand2Controller::class, 'delete'])->name('brand2.delete');
+    });
+
     Route::get('/products', [ProductController::class, 'index'])->name('pro.index');
+    Route::get('/products2', [ProductController::class, 'index2'])->name('pro.index2');
+    Route::get('/products-3', [ProductController::class, 'index3'])->name('pro.index3');
+    Route::get('/products-4/{perpage?}', [ProductController::class, 'index4'])->name('pro.index4');
+    Route::get('/products-5/{perpage?}', [ProductController::class, 'index5'])->name('pro.index5');
     Route::get('/products/create', [ProductController::class, 'create'])->name('pro.create');
     Route::post('/products/store', [ProductController::class, 'store'])->name('pro.store');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('pro.edit');
     Route::post('/products/{id}', [ProductController::class, 'update'])->name('pro.update');
     Route::post('/products/{id}/delete', [ProductController::class, 'delete'])->name('pro.delete');
-});
 
-
-
-// ---- Aliases without 'ad.' for products-2 (pro2.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
-    Route::get('/products-2', [Product2Controller::class, 'index'])->name('pro2.index');
+    //Eloquent ORM - Products
     Route::get('/products-2/create', [Product2Controller::class, 'create'])->name('pro2.create');
     Route::post('/products-2/store', [Product2Controller::class, 'store'])->name('pro2.store');
     Route::get('/products-2/{id}/edit', [Product2Controller::class, 'edit'])->name('pro2.edit');
     Route::post('/products-2/{id}', [Product2Controller::class, 'update'])->name('pro2.update');
     Route::post('/products-2/{id}/delete', [Product2Controller::class, 'delete'])->name('pro2.delete');
-});
-// ---- Aliases without 'ad.' for users (user.*) ----
-Route::middleware(['auth','roles:1'])->prefix('admin')->group(function () {
+    Route::get('/products-2/{perpage?}', [Product2Controller::class, 'index'])->name('pro2.index');
+
     Route::get('/users', [UserController::class, 'index'])->name('user.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
-    Route::post('/users/store', [UserController::class, 'store'])->name('user.store');
-    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::post('/users/{id}', [UserController::class, 'update'])->name('user.update');
-    Route::delete('/users/{id}/delete', [UserController::class, 'delete'])->name('user.delete');
 });
-
