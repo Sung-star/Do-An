@@ -8,6 +8,7 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 
     <!-- Google Fonts + Bootstrap + Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -48,20 +49,6 @@
             border: none;
         }
 
-        /* Header */
-        header.hero-section {
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            color: #fff;
-            padding: 3rem 0;
-            text-align: center;
-        }
-
-        header.hero-section h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        /* Footer */
         footer {
             background-color: #222;
             color: #ddd;
@@ -94,22 +81,15 @@
 
         #mainCarousel {
             max-width: 1200px;
-            /* giữ tỉ lệ ngang hợp lý như Lazada */
             margin: 0 auto;
             margin-top: 10px;
-            /* căn giữa */
         }
-
 
         .carousel-inner img {
             width: 100%;
             height: 450px;
-            /* chiều cao cố định của banner */
             object-fit: cover;
-            /* lấp đầy khung, cắt phần thừa */
         }
-    </style>
-
     </style>
 </head>
 
@@ -117,7 +97,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('homepage') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Hoài Sung Shop">
                 <span class="ms-2 text-white fw-bold">Hoài Sung Shop</span>
             </a>
@@ -132,7 +112,7 @@
                 <!-- Menu -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('home') }}"><i class="bi bi-house-door"></i>
+                        <a class="nav-link active" href="{{ route('homepage') }}"><i class="bi bi-house-door"></i>
                             Home</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Thông Tin</a></li>
@@ -147,23 +127,34 @@
                 </form>
 
                 <!-- Cart -->
-                <a class="btn btn-light position-relative" href="{{ route('cart.show') }}">
+                <a class="btn btn-light position-relative me-3" href="{{ route('cartshow') }}">
                     <i class="bi bi-cart3"></i>
                     <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle">
                         {{ count(Session::get('cart', [])) }}
                     </span>
                 </a>
+
+                <!-- Login / Logout -->
+                <ul class="navbar-nav ms-auto">
+                    @auth
+                        <li class="nav-item">
+                            <span class="nav-link">Xin chào {{ Auth::user()->username }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-link nav-link text-white">Đăng xuất</button>
+                            </form>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" class="nav-link text-white">Đăng nhập</a>
+                        </li>
+                    @endauth
+                </ul>
             </div>
         </div>
     </nav>
-
-    {{-- <!-- Header -->
-    <header class="hero-section">
-        <div class="container">
-            <h1>🛍️ Shop đồ dùng công nghệ</h1>
-            <p class="lead">Mua sắm dễ dàng – Trải nghiệm tuyệt vời!</p>
-        </div>
-    </header> --}}
 
     <!-- Banner Carousel -->
     <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
@@ -198,8 +189,6 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
-
 
     <!-- Main Content -->
     <main class="container py-5">
@@ -239,7 +228,6 @@
             </div>
 
             <hr class="border-light">
-
             <div class="text-center">
                 <p class="mb-0">© 2025 Hoài Sung Shop. All rights reserved.</p>
             </div>
