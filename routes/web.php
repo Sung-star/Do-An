@@ -81,6 +81,9 @@ Route::prefix('coupon')->name('coupon.')->group(function () {
     Route::post('/remove', [CouponController::class, 'remove'])->name('remove');
 });
 
+
+Route::get('/category/{id}', [CategoryController::class, 'detail'])->name('category.detail');
+
 // ===============================
 // ADMIN ROUTES
 // ===============================
