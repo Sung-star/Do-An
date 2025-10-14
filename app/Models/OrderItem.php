@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
+    // ✅ Khai báo tên bảng thực tế trong DB
+    protected $table = 'orderitems';
+
     protected $fillable = [
         'orderid',
         'productid',
@@ -22,5 +25,4 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class, 'productid', 'id');
     }
-    
 }
