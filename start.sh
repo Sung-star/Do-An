@@ -13,10 +13,15 @@ echo "⚙️ Rebuilding caches..."
 php artisan route:cache || true
 php artisan config:cache || true
 php artisan view:cache || true
+
+echo "⏳ Waiting for database to be ready..."
+sleep 10
+
 # Chạy migrate (nếu chưa có bảng)
-php artisan migrate --force
+php artisan migrate --force || true
 
 # Chạy seed (nếu cần)
-php artisan db:seed --class=ReviewSeeder --force
+php artisan db:seed --class=ReviewSeeder --force || true
+
 echo "🚀 Starting Laravel app on Railway..."
 php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
