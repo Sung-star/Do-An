@@ -196,7 +196,3 @@ class AboutController extends Controller
         return view('about.contact', compact('contactInfo', 'offices'));
     }
 }
-
-
-
-?>

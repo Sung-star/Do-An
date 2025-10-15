@@ -8,6 +8,7 @@
 
     <form method="POST" action="{{ route('ad.customers.store') }}">
         @csrf
+
         <div class="mb-3">
             <label class="form-label">👤 Họ tên</label>
             <input type="text" name="fullname" class="form-control" value="{{ old('fullname') }}" required>
@@ -16,6 +17,11 @@
         <div class="mb-3">
             <label class="form-label">📞 Số điện thoại</label>
             <input type="text" name="tel" class="form-control" value="{{ old('tel') }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">📧 Email (tuỳ chọn)</label>
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
         </div>
 
         <div class="mb-3">

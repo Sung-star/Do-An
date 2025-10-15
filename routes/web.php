@@ -166,7 +166,7 @@ Route::prefix('ad')->middleware(['auth', 'roles:1'])->name('ad.')->group(functio
     Route::resource('orderitems', \App\Http\Controllers\Admin\OrderitemController::class);
 });
 
-
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('ad.dashboard');
 
 
 

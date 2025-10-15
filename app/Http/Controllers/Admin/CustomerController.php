@@ -24,14 +24,14 @@ class CustomerController extends Controller
         $request->validate([
             'fullname' => 'required|string|max:255',
             'tel' => 'required|string|max:20|unique:customers,tel',
+            'email' => 'nullable|email|max:255|unique:customers,email',
             'address' => 'required|string|max:255',
         ]);
 
-        Customer::create($request->only(['fullname', 'tel', 'address']));
+        Customer::create($request->only(['fullname', 'tel', 'email', 'address']));
 
         return redirect()->route('ad.customers.index')->with('success', 'Thêm khách hàng thành công');
     }
-
 
     public function edit(Customer $customer)
     {
@@ -42,11 +42,12 @@ class CustomerController extends Controller
     {
         $request->validate([
             'fullname' => 'required|string|max:255',
-            'tel' => 'required|string|max:20',
+            'tel' => 'required|string|max:20|unique:customers,tel,' . $customer->id,
+            'email' => 'nullable|email|max:255|unique:customers,email,' . $customer->id,
             'address' => 'required|string|max:255',
         ]);
 
-        $customer->update($request->only(['fullname', 'tel', 'address']));
+        $customer->update($request->only(['fullname', 'tel', 'email', 'address']));
 
         return redirect()->route('ad.customers.index')->with('success', 'Cập nhật khách hàng thành công');
     }
