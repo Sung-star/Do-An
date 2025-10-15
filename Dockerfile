@@ -1,3 +1,5 @@
+CMD ["sh", "start.sh"]
+
 # PHP với FPM
 FROM php:8.2-fpm
 
