@@ -20,8 +20,13 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
 
+# Tạo storage symlink
+RUN php artisan storage:link || true
+
 # Cổng web
 EXPOSE 8000
 
-# Khởi chạy Laravel (tự migrate DB)
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# ✅ Khởi chạy Laravel + migrate + seed tự động
+CMD php artisan migrate --force && \
+    php artisan db:seed --class=ReviewSeeder --force && \
+    php artisan serve --host=0.0.0.0 --port=8000
