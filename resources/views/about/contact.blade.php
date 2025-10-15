@@ -238,7 +238,7 @@
 
         <div class="contact-info">
             <h3>Thông tin liên hệ</h3>
-            <p><strong>Email:</strong> <a href="mailto:contact@modernshop.vn">contact@modernshop.vn</a></p>
+            <p><strong>Email:</strong> <a href="mailto:contact@HSStore.vn">contact@HSStore.vn</a></p>
             <p><strong>Số điện thoại:</strong> <a href="tel:+84123456789">+84 123 456 789</a></p>
             <p><strong>Địa chỉ:</strong> 123 Nguyễn Huệ, Quận 1, TP.HCM</p>
             <p class="working-hours"><strong>Giờ làm việc:</strong> Từ 9:00 AM đến 6:00 PM (Thứ Hai - Thứ Sáu)</p>

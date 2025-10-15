@@ -1,10 +1,10 @@
 @extends('layout.client')
 
 @section('content')
-    {{-- Bộ lọc --}}
-    <section class="py-3 bg-white">
+    {{-- 🧭 BỘ LỌC SẢN PHẨM --}}
+    <section class="py-3 bg-white border-bottom shadow-sm">
         <div class="container">
-            <form method="GET" action="{{ url()->current() }}" class="row g-2 align-items-center">
+            <form method="GET" action="{{ url()->current() }}" class="row g-3 align-items-center">
                 {{-- Danh mục --}}
                 <div class="col-auto">
                     <select name="cateid" class="form-select" onchange="this.form.submit()">
@@ -33,7 +33,7 @@
                 {{-- Lọc theo giá --}}
                 <div class="col-auto">
                     <select name="price_range" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Lọc theo giá --</option>
+                        <option value="">Khoảng giá</option>
                         <option value="0-1000000" {{ request('price_range') == '0-1000000' ? 'selected' : '' }}>Dưới 1 triệu
                         </option>
                         <option value="1000000-5000000" {{ request('price_range') == '1000000-5000000' ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                 {{-- Sắp xếp --}}
                 <div class="col-auto">
                     <select name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Sắp xếp --</option>
+                        <option value="">Sắp xếp theo</option>
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Giá tăng dần
                         </option>
                         <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Giá giảm dần
@@ -59,17 +59,20 @@
                     </select>
                 </div>
 
+                {{-- Nút làm mới --}}
                 <div class="col-auto">
-                    <a href="{{ url()->current() }}" class="btn btn-outline-secondary">Reset</a>
+                    <a href="{{ url()->current() }}" class="btn btn-outline-primary px-3">
+                        <i class="bi bi-arrow-repeat"></i> Làm mới
+                    </a>
                 </div>
             </form>
         </div>
     </section>
 
-    {{-- Sản phẩm nổi bật --}}
+    {{-- 🌟 SẢN PHẨM NỔI BẬT --}}
     <section class="py-5 bg-light">
         <div class="container">
-            <h2 class="mb-5 text-center fw-bold text-uppercase text-dark">✨ Sản phẩm nổi bật</h2>
+            <h2 class="mb-5 text-center fw-bold text-uppercase text-dark">🌟 Sản phẩm nổi bật</h2>
             <div class="row g-4">
                 @foreach ($listpro ?? [] as $item)
                     <div class="col-6 col-md-4 col-xl-3">
@@ -90,7 +93,7 @@
                                     <h6 class="fw-semibold text-dark mb-2">{{ $item->proname ?? $item->name }}</h6>
                                     <p class="text-danger fw-bold mb-1">{{ number_format($item->price ?? 0) }}đ</p>
 
-                                    {{-- ⭐ Rating --}}
+                                    {{-- ⭐ Đánh giá --}}
                                     @php $avg = round($item->reviews()->avg('rating')); @endphp
                                     <div class="star-rating mb-2">
                                         @for ($i = 1; $i <= 5; $i++)
@@ -106,10 +109,10 @@
         </div>
     </section>
 
-    {{-- Danh sách sản phẩm --}}
+    {{-- 🛒 DANH SÁCH SẢN PHẨM --}}
     <section class="py-4">
         <div class="container">
-            <h3 class="mb-4">Tất cả sản phẩm</h3>
+            <h3 class="mb-4 fw-bold text-dark"> Tất cả sản phẩm</h3>
             <div class="row g-3">
                 @forelse ($products ?? [] as $item)
                     <div class="col-6 col-md-3">
@@ -130,7 +133,7 @@
                                     <h6 class="fw-semibold text-dark mb-2">{{ $item->proname ?? $item->name }}</h6>
                                     <p class="text-danger fw-bold mb-1">{{ number_format($item->price ?? 0) }}đ</p>
 
-                                    {{-- ⭐ Rating (đã thêm) --}}
+                                    {{-- ⭐ Đánh giá --}}
                                     @php $avg = round($item->reviews()->avg('rating')); @endphp
                                     <div class="star-rating mb-2">
                                         @for ($i = 1; $i <= 5; $i++)
@@ -142,10 +145,11 @@
                         </a>
                     </div>
                 @empty
-                    <p class="text-center text-muted">Không có sản phẩm nào phù hợp.</p>
+                    <p class="text-center text-muted">Không có sản phẩm nào phù hợp với lựa chọn hiện tại.</p>
                 @endforelse
             </div>
 
+            {{-- Phân trang --}}
             <div class="d-flex justify-content-center mt-4">
                 @if (isset($products) && method_exists($products, 'withQueryString'))
                     {{ $products->withQueryString()->links() }}
@@ -154,9 +158,33 @@
         </div>
     </section>
 
-    {{-- CSS --}}
+    {{-- 🎨 CSS TÙY CHỈNH --}}
     <style>
-        /* Hiệu ứng phóng to ảnh */
+        /* Form filter */
+        select.form-select {
+            border-radius: 8px;
+            border-color: #dee2e6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+
+        select.form-select:hover,
+        select.form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+        }
+
+        .btn-outline-primary {
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        /* Ảnh sản phẩm */
         .hover-scale {
             transition: transform 0.4s ease;
         }
@@ -165,7 +193,7 @@
             transform: scale(1.05);
         }
 
-        /* Card sản phẩm */
+        /* Card */
         .product-card {
             transition: box-shadow 0.3s ease, transform 0.3s ease;
             border-radius: 12px;
@@ -183,23 +211,17 @@
         }
 
         /* ⭐ Đánh giá sao */
-        .star-rating {
-            font-size: 0.9rem;
-        }
-
         .star-rating span {
-            margin-right: 2px;
             font-size: 1rem;
+            margin-right: 2px;
         }
 
-        .star-rating .text-warning {
+        .text-warning {
             color: #ffc107 !important;
-            /* Vàng tươi */
         }
 
-        .star-rating .text-muted {
+        .text-muted {
             color: #d1d1d1 !important;
-            /* Xám nhạt */
         }
     </style>
 @endsection

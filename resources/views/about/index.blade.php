@@ -1,9 +1,9 @@
 @extends('layout.app')
 
-@section('title', 'Giới thiệu về Hoài Sung Shop')
+@section('title', 'Giới thiệu về HS Store')
 
 @section('description')
-    Tìm hiểu về Hoài Sung Shop - Cửa hàng thương mại điện tử uy tín với hơn
+    Tìm hiểu về HS Store - Cửa hàng thương mại điện tử uy tín với hơn
     {{ date('Y') - $companyData['founded'] }} năm kinh nghiệm
 @endsection
 
