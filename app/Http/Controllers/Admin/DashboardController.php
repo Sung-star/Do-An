@@ -25,12 +25,10 @@ class DashboardController extends Controller
         // ======================
         $todayRevenue = Order::where('status', 'Hoàn thành')
             ->whereDate('created_at', Carbon::today())
-            ->with('items') // load luôn items để tính
+            ->with('items')
             ->get()
             ->sum(function ($order) {
-                return $order->items->sum(function ($item) {
-                    return $item->quantity * $item->price;
-                });
+                return $order->items->sum(fn($item) => $item->quantity * $item->price);
             });
 
         // ======================
@@ -50,22 +48,64 @@ class DashboardController extends Controller
             ->get();
 
         // ======================
-        // Doanh thu theo tháng (năm hiện tại) – tính từ order_items
+        // Doanh thu theo tháng (năm hiện tại)
         // ======================
         $monthlyRevenue = Order::where('status', 'Hoàn thành')
             ->whereYear('created_at', Carbon::now()->year)
             ->with('items')
             ->get()
-            ->groupBy(function ($order) {
-                return $order->created_at->format('m'); // nhóm theo tháng
-            })
+            ->groupBy(fn($order) => $order->created_at->format('m'))
             ->map(function ($orders) {
                 return $orders->sum(function ($order) {
-                    return $order->items->sum(function ($item) {
-                        return $item->quantity * $item->price;
-                    });
+                    return $order->items->sum(fn($item) => $item->quantity * $item->price);
                 });
             });
+
+        // ======================
+        // 🔢 Tính tăng trưởng % so với tháng trước
+        // ======================
+        $thisMonth = Carbon::now()->month;
+        $lastMonth = Carbon::now()->subMonth()->month;
+        $year = Carbon::now()->year;
+
+        // 1️⃣ Sản phẩm tạo trong tháng
+        $productThisMonth = Product::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
+        $productLastMonth = Product::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
+        $growthProducts = $this->calcGrowth($productThisMonth, $productLastMonth);
+
+        // 2️⃣ Đơn hàng trong tháng
+        $orderThisMonth = Order::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
+        $orderLastMonth = Order::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
+        $growthOrders = $this->calcGrowth($orderThisMonth, $orderLastMonth);
+
+        // 3️⃣ Khách hàng mới trong tháng
+        $customerThisMonth = Customer::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
+        $customerLastMonth = Customer::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
+        $growthCustomers = $this->calcGrowth($customerThisMonth, $customerLastMonth);
+
+        // 4️⃣ Doanh thu tháng này vs tháng trước
+        $revenueThisMonth = Order::where('status', 'Hoàn thành')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $thisMonth)
+            ->with('items')
+            ->get()
+            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
+
+        $revenueLastMonth = Order::where('status', 'Hoàn thành')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $lastMonth)
+            ->with('items')
+            ->get()
+            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
+
+        $growthRevenue = $this->calcGrowth($revenueThisMonth, $revenueLastMonth);
+
+        $growthData = [
+            'products' => $growthProducts,
+            'orders' => $growthOrders,
+            'customers' => $growthCustomers,
+            'revenue' => $growthRevenue
+        ];
 
         // ======================
         // Trả về view dashboard
@@ -78,7 +118,19 @@ class DashboardController extends Controller
             'latestProducts',
             'latestOrders',
             'pendingOrders',
-            'monthlyRevenue'
+            'monthlyRevenue',
+            'growthData' // ✅ truyền sang view
         ));
+    }
+
+    /**
+     * Hàm tính phần trăm tăng trưởng
+     */
+    private function calcGrowth($current, $previous)
+    {
+        if ($previous == 0 && $current > 0) return 100; // tăng đột biến
+        if ($previous == 0 && $current == 0) return 0;
+        $change = (($current - $previous) / $previous) * 100;
+        return round($change, 1);
     }
 }

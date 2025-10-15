@@ -27,6 +27,7 @@
                         <th>ID</th>
                         <th>👤 Họ tên</th>
                         <th>📞 SĐT</th>
+                        <th>📧 Email</th> {{-- 👈 Thêm cột Email --}}
                         <th>🏠 Địa chỉ</th>
                         <th>🛒 Số đơn hàng</th>
                         <th>⚙️ Thao tác</th>
@@ -38,6 +39,7 @@
                             <td>{{ $customer->id }}</td>
                             <td>{{ $customer->fullname }}</td>
                             <td>{{ $customer->tel }}</td>
+                            <td>{{ $customer->email ?? '—' }}</td> {{-- 👈 Hiển thị email, nếu null thì in dấu — --}}
                             <td>{{ $customer->address }}</td>
                             <td>
                                 <span class="badge bg-success">{{ $customer->orders_count }}</span>
@@ -57,7 +59,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6"><em>Không có khách hàng nào.</em></td>
+                            <td colspan="7"><em>Không có khách hàng nào.</em></td>
                         </tr>
                     @endforelse
                 </tbody>

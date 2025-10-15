@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h3>Thương hiệu (Eloquent ORM)</h3>
+        <h3>Thương hiệu </h3>
         <a class="btn btn-primary mb-3" href="{{ route('brand2.create') }}">+ Thêm</a>
         <x-alert></x-alert>
         <div id="list">

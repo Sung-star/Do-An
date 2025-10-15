@@ -4,118 +4,199 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hoài Sung Shop</title>
+    <title>HS Store</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 
     <!-- Google Fonts + Bootstrap + Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: #f9f9f9;
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+            color: #222;
         }
 
         /* Navbar */
         .navbar {
-            background-color: #0066ff;
+            background: linear-gradient(90deg, #004aad, #007bff);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease-in-out;
+        }
+
+        .navbar.scrolled {
+            background: #004aad !important;
         }
 
         .navbar-brand img {
-            height: 40px;
+            height: 42px;
         }
 
         .navbar .nav-link {
             color: #fff !important;
             font-weight: 500;
+            margin-right: 10px;
+            transition: 0.2s;
         }
 
         .navbar .nav-link:hover {
-            color: #ffcc00 !important;
+            color: #ffd500 !important;
         }
 
         .search-bar .form-control {
-            border-radius: 20px 0 0 20px;
+            border-radius: 25px 0 0 25px;
+            border: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .search-bar .btn {
-            border-radius: 0 20px 20px 0;
-            background: #ffcc00;
+            border-radius: 0 25px 25px 0;
+            background: #ffd500;
+            color: #000;
             border: none;
+            transition: background 0.2s;
         }
 
+        .search-bar .btn:hover {
+            background: #ffc107;
+        }
+
+        .btn-cart {
+            background: #fff;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .btn-cart:hover {
+            background: #ffd500;
+        }
+
+        .badge {
+            background: #ff3333;
+            font-size: 0.7rem;
+        }
+
+        /* ✅ Banner tĩnh */
+        .home-banner {
+            margin-top: 100px;
+            margin-bottom: 40px;
+        }
+
+        .home-banner img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .home-banner img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Footer */
         footer {
-            background-color: #222;
-            color: #ddd;
+            background: linear-gradient(180deg, #111827, #0f172a);
+            color: #ccc;
             padding: 2rem 0;
         }
 
+        footer h5 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
         footer a {
-            color: #ffcc00;
+            color: #aaa;
             text-decoration: none;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            color: #ffd500;
         }
 
         footer .social-icons a {
             color: #fff;
             font-size: 1.3rem;
             margin: 0 10px;
+            transition: color 0.3s;
         }
 
         footer .social-icons a:hover {
-            color: #ffcc00;
+            color: #ffd500;
         }
 
-        .badge {
-            background-color: #ffcc00;
-            color: #000;
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
         }
 
-        #mainCarousel {
-            max-width: 1200px;
-            margin: 0 auto;
-            margin-top: 10px;
+        .scroll-top:hover {
+            background: #0056d2;
         }
+        footer {
+    background: #1e1e1e;
+    color: #ccc;
+}
 
-        .carousel-inner img {
-            width: 100%;
-            height: 450px;
-            object-fit: cover;
-        }
+footer h5 {
+    color: #fff;
+}
+
+footer a:hover {
+    color: #ffd500 !important;
+}
+
     </style>
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg shadow-sm">
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('homepage') }}">
-                <img src="{{ asset('images/logo.png') }}" alt="Hoài Sung Shop">
-                <span class="ms-2 text-white fw-bold">Hoài Sung Shop</span>
+                <img src="{{ asset('images/logo.png') }}" alt="HS Logo">
+                <span class="ms-2 text-white fw-bold fs-5">HS Store</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon text-white"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Menu -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('homepage') }}"><i class="bi bi-house-door"></i>
-                            Home</a>
+                        <a class="nav-link active" href="{{ route('homepage') }}"><i class="bi bi-house-door"></i> Trang
+                            chủ</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Thông Tin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Giới thiệu</a></li>
                     <li class="nav-item dropdown"><x-category-menu></x-category-menu></li>
                     <li class="nav-item dropdown"><x-brand-menu></x-brand-menu></li>
                 </ul>
@@ -127,28 +208,40 @@
                 </form>
 
                 <!-- Cart -->
-                <a class="btn btn-light position-relative me-3" href="{{ route('cartshow') }}">
-                    <i class="bi bi-cart3"></i>
+                <a class="btn-cart me-3" href="{{ route('cartshow') }}">
+                    <i class="bi bi-cart3 fs-5"></i>
                     <span class="badge rounded-pill position-absolute top-0 start-100 translate-middle">
                         {{ count(Session::get('cart', [])) }}
                     </span>
                 </a>
 
-                <!-- Login / Logout -->
-                <ul class="navbar-nav ms-auto">
+                <!-- User -->
+                <ul class="navbar-nav">
                     @auth
-                        <li class="nav-item">
-                            <span class="nav-link">Xin chào {{ Auth::user()->username }}</span>
-                        </li>
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-link nav-link text-white">Đăng xuất</button>
-                            </form>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Hồ sơ của tôi</a></li>
+                                <li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger"><i
+                                                class="bi bi-box-arrow-right"></i> Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
                         </li>
                     @else
                         <li class="nav-item">
-                            <a href="{{ route('login') }}" class="nav-link text-white">Đăng nhập</a>
+                            <a href="{{ route('login') }}" class="nav-link text-white"><i class="bi bi-person"></i> Đăng
+                                nhập</a>
                         </li>
                     @endauth
                 </ul>
@@ -156,87 +249,75 @@
         </div>
     </nav>
 
-    <!-- Banner Carousel -->
-    <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
-        <!-- Indicators -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"
-                aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-
-        <!-- Slides -->
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ asset('storage/banner/banner1.png') }}" class="d-block w-100" alt="Banner 1">
+    <!-- ✅ Banner tĩnh thay thế carousel -->
+    @if (Request::route()->getName() == 'homepage')
+        <section class="home-banner text-center">
+            <div class="container">
+                <img src="{{ asset('storage/banner/banner1.png') }}" alt="HS Store Banner">
             </div>
-            <div class="carousel-item">
-                <img src="{{ asset('storage/banner/banner2.png') }}" class="d-block w-100" alt="Banner 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('storage/banner/banner3.png') }}" class="d-block w-100" alt="Banner 3">
-            </div>
-        </div>
+        </section>
+    @endif
 
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-
-    <!-- Main Content -->
-    <main class="container py-5">
+    <!-- Nội dung chính -->
+    <main class="container py-5 mt-5">
         @yield('content')
     </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <!-- About -->
-                <div class="col-md-4 mb-3">
-                    <h5 class="text-white">Về Hoài Sung Shop</h5>
-                    <p>Website thương mại điện tử cung cấp sản phẩm chính hãng, dịch vụ nhanh chóng và giá cả hợp lý.
-                    </p>
-                </div>
-
-                <!-- Support -->
-                <div class="col-md-4 mb-3">
-                    <h5 class="text-white">Hỗ trợ</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Chính sách bảo hành</a></li>
-                        <li><a href="#">Chính sách đổi trả</a></li>
-                        <li><a href="#">Câu hỏi thường gặp</a></li>
-                    </ul>
-                </div>
-
-                <!-- Social -->
-                <div class="col-md-4 text-center">
-                    <h5 class="text-white">Kết nối với chúng tôi</h5>
-                    <div class="social-icons">
-                        <a href="https://facebook.com" target="_blank"><i class="bi bi-facebook"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="bi bi-instagram"></i></a>
-                        <a href="https://zalo.me" target="_blank"><i class="bi bi-chat-dots-fill"></i></a>
-                    </div>
-                </div>
+    <!-- Footer -->
+<footer class="mt-5">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Cột 1: Giới thiệu -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold text-white mb-3">HS Store</h5>
+                <p class="text-light small">
+                    Website thương mại điện tử cung cấp sản phẩm công nghệ chính hãng, 
+                    dịch vụ nhanh chóng và giá cả hợp lý.
+                </p>
             </div>
 
-            <hr class="border-light">
-            <div class="text-center">
-                <p class="mb-0">© 2025 Hoài Sung Shop. All rights reserved.</p>
+            <!-- Cột 2: Hỗ trợ -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold text-white mb-3">Hỗ trợ</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-warning text-decoration-none">Chính sách bảo hành</a></li>
+                    <li><a href="#" class="text-warning text-decoration-none">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="text-warning text-decoration-none">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 3: Mạng xã hội -->
+            <div class="col-md-4 text-md-end mb-4 text-center">
+                <h5 class="fw-bold text-white mb-3">Kết nối với chúng tôi</h5>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
+                    <a href="https://zalo.me" target="_blank" class="text-white fs-4"><i class="bi bi-chat-dots-fill"></i></a>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <!-- Bootstrap JS -->
+        <hr class="border-light opacity-25">
+
+        <div class="text-center small text-secondary">
+            © 2025 Hoài Sung Shop. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Scroll top -->
+    <button class="scroll-top" id="scrollTopBtn"><i class="bi bi-arrow-up"></i></button>
+
+    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script>
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.navbar');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
 </body>
 
 </html>

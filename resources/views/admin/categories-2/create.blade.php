@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mt-5">
-        <h3>Thêm loại sản phẩm (Eloquent ORM)</h3>
+        <h3>Thêm loại sản phẩm </h3>
         <x-alert></x-alert>
         <div class="card shadow-sm mt-3" style="max-width: 500px;">
             <div class="card-body">

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h3>Danh sách sản phẩm (Eloquent ORM)</h3>
+    <h3>Danh sách sản phẩm </h3>
 
     <x-alert></x-alert>
 

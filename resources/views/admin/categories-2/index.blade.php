@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mt-4">
-        <h3>Danh sách loại sản phẩm (Eloquent ORM)</h3>
+        <h3>Danh sách loại sản phẩm </h3>
 
         <a class="btn btn-primary mb-3" href="{{ route('cate2.create') }}">+ Thêm</a>
         <x-alert></x-alert>

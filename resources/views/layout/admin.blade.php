@@ -21,7 +21,7 @@
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Custom CSS -->
+    <!-- ================= CUSTOM CSS ================= -->
     <style>
         :root {
             --primary: #4e73df;
@@ -113,6 +113,7 @@
             background-color: #fff;
             border-top: 1px solid #ddd;
             box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
         .btn {
@@ -130,7 +131,7 @@
             border-radius: 4px;
         }
 
-        /* 🌙 DARK MODE STYLES */
+        /* 🌙 DARK MODE */
         body.dark-mode {
             background-color: #1e1e2f;
             color: #f0f0f0;
@@ -158,23 +159,31 @@
             color: #fff;
         }
 
+        /* ✅ FIX FOOTER */
         body.dark-mode footer {
-            background-color: #1b1e2d;
+            background-color: #1b1e2d !important;
+            color: #ccc !important;
             border-top: 1px solid #333;
-            color: #bbb;
         }
 
-        body.dark-mode .card {
-            background-color: #26293e;
-            color: #e0e0e0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        body.dark-mode footer a {
+            color: #4e9cff !important;
         }
 
-        body.dark-mode .btn {
-            border-color: #555;
+        /* ✅ FIX TABLE & TEXT */
+        body.dark-mode table {
+            background-color: #2a2e40 !important;
+            color: #f0f0f0 !important;
         }
 
-        /* ==== FIX TEXT COLORS IN DARK MODE ==== */
+        body.dark-mode thead {
+            background-color: #3b3f54 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode tbody tr:hover {
+            background-color: #343a50 !important;
+        }
 
         body.dark-mode h1,
         body.dark-mode h2,
@@ -188,8 +197,7 @@
         body.dark-mode th,
         body.dark-mode td,
         body.dark-mode a,
-        body.dark-mode li,
-        body.dark-mode .text-dark {
+        body.dark-mode li {
             color: #f0f0f0 !important;
         }
 
@@ -197,21 +205,7 @@
             color: #4e73df !important;
         }
 
-        /* Bảng và card nền tối */
-        body.dark-mode table {
-            background-color: #2a2e40 !important;
-            color: #f0f0f0 !important;
-        }
-
-        body.dark-mode thead {
-            background-color: #3b3f54 !important;
-        }
-
-        body.dark-mode tbody tr:hover {
-            background-color: #343a50 !important;
-        }
-
-        /* Ô input và select */
+        /* ✅ FIX FORM INPUTS */
         body.dark-mode input,
         body.dark-mode select,
         body.dark-mode textarea {
@@ -220,7 +214,12 @@
             border: 1px solid #444 !important;
         }
 
-        /* Nút */
+        body.dark-mode .card {
+            background-color: #26293e;
+            color: #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
         body.dark-mode .btn-light {
             background-color: #3c3f53 !important;
             color: #f0f0f0 !important;
@@ -231,10 +230,136 @@
             border-color: #666 !important;
         }
 
-        /* SweetAlert trong chế độ tối */
         body.dark-mode .swal2-popup {
             background-color: #2a2e40 !important;
             color: #f0f0f0 !important;
+        }
+
+        /* ===== DARK MODE – TABLE FIXES (ghi đè mạnh) ===== */
+        body.dark-mode .table {
+            background-color: #2a2e40 !important;
+            color: #f1f1f1 !important;
+            border-color: #3e435a !important;
+        }
+
+        /* header của bảng: luôn nền tối + chữ sáng, bất kể .table-light/.table-primary */
+        body.dark-mode .table thead,
+        body.dark-mode .table thead tr,
+        body.dark-mode .table thead th {
+            background-color: #2f3348 !important;
+            color: #ffffff !important;
+            border-color: #4a4f6a !important;
+            opacity: 1 !important;
+            /* vô hiệu hoá các class opacity-x */
+        }
+
+        /* nếu bạn dùng .table-primary/.table-light cho thead */
+        body.dark-mode .table-primary {
+            background-color: #2f3b78 !important;
+            color: #ffffff !important;
+        }
+
+        body.dark-mode .table-light {
+            background-color: #2f3348 !important;
+            color: #ffffff !important;
+        }
+
+        /* sọc của .table-striped trong dark mode */
+        body.dark-mode .table-striped>tbody>tr:nth-of-type(odd) {
+            --bs-table-accent-bg: #262a3d !important;
+            color: inherit !important;
+        }
+
+        /* viền ô */
+        body.dark-mode .table td,
+        body.dark-mode .table th {
+            border-color: #3e435a !important;
+        }
+
+        /* utility thường làm chữ mờ ở header/footer */
+        body.dark-mode .text-secondary {
+            color: #d0d3e2 !important;
+        }
+
+        body.dark-mode .opacity-50,
+        body.dark-mode .opacity-75 {
+            opacity: 1 !important;
+        }
+
+        /* ===== DARK MODE PAGINATION FIX ===== */
+        body.dark-mode .pagination {
+            --bs-pagination-bg: #2a2e40;
+            --bs-pagination-border-color: #3e435a;
+            --bs-pagination-color: #f0f0f0;
+            --bs-pagination-hover-bg: #3a3f55;
+            --bs-pagination-hover-color: #ffffff;
+            --bs-pagination-active-bg: #4e73df;
+            --bs-pagination-active-border-color: #4e73df;
+            --bs-pagination-active-color: #ffffff;
+            --bs-pagination-disabled-bg: #1e1e2f;
+            --bs-pagination-disabled-color: #777;
+        }
+
+        /* Nếu bạn có dùng .page-item hoặc .page-link riêng */
+        body.dark-mode .page-item .page-link {
+            background-color: #2a2e40 !important;
+            color: #f0f0f0 !important;
+            border: 1px solid #3e435a !important;
+        }
+
+        body.dark-mode .page-item.active .page-link {
+            background-color: #4e73df !important;
+            border-color: #4e73df !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .page-item:hover .page-link {
+            background-color: #3a3f55 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .page-item.disabled .page-link {
+            background-color: #1e1e2f !important;
+            color: #777 !important;
+            border-color: #333 !important;
+        }
+
+        .card-stats {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card-stats:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-stats i {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+
+        /* 🌙 Fix chữ dropdown menu bị mờ trong Dark Mode */
+        body.dark-mode .dropdown-menu {
+            background-color: #2a2e40 !important;
+            /* nền tối vừa mắt */
+            color: #f0f0f0 !important;
+            /* chữ sáng */
+            border: 1px solid #3a3f54 !important;
+        }
+
+        body.dark-mode .dropdown-menu .dropdown-item {
+            color: #f0f0f0 !important;
+            /* màu chữ sáng */
+        }
+
+        body.dark-mode .dropdown-menu .dropdown-item:hover,
+        body.dark-mode .dropdown-menu .dropdown-item:focus {
+            background-color: #3a3f54 !important;
+            /* hover tối nhẹ */
+            color: #fff !important;
+            /* chữ trắng khi hover */
         }
     </style>
 </head>
@@ -249,10 +374,8 @@
             <i class="fas fa-bars"></i>
         </button>
 
-        <!-- Right-side group -->
         <div class="ms-auto d-flex align-items-center">
-
-            <!-- Search (moved to right) -->
+            <!-- Search -->
             <form class="d-none d-md-inline-block form-inline me-3">
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="Tìm kiếm..." aria-label="Search..." />
@@ -262,7 +385,7 @@
                 </div>
             </form>
 
-            <!-- Dark Mode Toggle -->
+            <!-- Dark Mode -->
             <button id="themeToggle" class="btn btn-sm btn-outline-light me-2" title="Đổi giao diện">
                 <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
             </button>
@@ -334,10 +457,10 @@
                 @yield('content')
             </main>
 
-            <!-- Footer -->
-            <footer class="py-4 bg-light mt-auto">
+            <!-- ✅ FOOTER -->
+            <footer class="py-4 mt-auto footer">
                 <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small text-secondary">
+                    <div class="d-flex align-items-center justify-content-between small">
                         <div>Copyright &copy; My Admin 2025</div>
                         <div>
                             <a href="#">Privacy Policy</a>
@@ -367,7 +490,7 @@
         </script>
     @endif
 
-    <!-- Dark Mode Script -->
+    <!-- ✅ Dark Mode Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
