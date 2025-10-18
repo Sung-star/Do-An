@@ -9,17 +9,25 @@ php artisan view:clear
 echo "🔗 Creating storage symlink..."
 php artisan storage:link || true
 
+echo "🧽 Fixing permissions..."
+chmod -R 775 storage bootstrap/cache
+
 echo "⚙️ Rebuilding caches..."
 php artisan route:cache || true
 php artisan config:cache || true
 php artisan view:cache || true
 
-# Chờ DB Railway khởi động (5–10 giây)
+# Xóa cache phân trang cũ
+rm -rf bootstrap/cache/*.php
+rm -rf storage/framework/views/*
+
+# Chờ DB Railway khởi động
 echo "⏳ Waiting for database to be ready..."
 sleep 10
 
 # Chạy migrate + seed
 php artisan migrate --force
+php artisan db:seed --class=ProductsTableSeeder --force
 php artisan db:seed --class=ReviewSeeder --force
 
 echo "🚀 Starting Laravel app on Railway..."
