@@ -34,10 +34,14 @@
                 <div class="col-auto">
                     <select name="price_range" class="form-select" onchange="this.form.submit()">
                         <option value="">Khoảng giá</option>
-                        <option value="0-1000000" {{ request('price_range') == '0-1000000' ? 'selected' : '' }}>Dưới 1 triệu</option>
-                        <option value="1000000-5000000" {{ request('price_range') == '1000000-5000000' ? 'selected' : '' }}>1 - 5 triệu</option>
-                        <option value="5000000-10000000" {{ request('price_range') == '5000000-10000000' ? 'selected' : '' }}>5 - 10 triệu</option>
-                        <option value="10000000-999999999" {{ request('price_range') == '10000000-999999999' ? 'selected' : '' }}>Trên 10 triệu</option>
+                        <option value="0-1000000" {{ request('price_range') == '0-1000000' ? 'selected' : '' }}>Dưới 1 triệu
+                        </option>
+                        <option value="1000000-5000000" {{ request('price_range') == '1000000-5000000' ? 'selected' : '' }}>
+                            1 - 5 triệu</option>
+                        <option value="5000000-10000000"
+                            {{ request('price_range') == '5000000-10000000' ? 'selected' : '' }}>5 - 10 triệu</option>
+                        <option value="10000000-999999999"
+                            {{ request('price_range') == '10000000-999999999' ? 'selected' : '' }}>Trên 10 triệu</option>
                     </select>
                 </div>
 
@@ -45,10 +49,13 @@
                 <div class="col-auto">
                     <select name="sort" class="form-select" onchange="this.form.submit()">
                         <option value="">Sắp xếp theo</option>
-                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
-                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
+                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Giá tăng dần
+                        </option>
+                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Giá giảm dần
+                        </option>
                         <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Mới nhất</option>
-                        <option value="bestseller" {{ request('sort') == 'bestseller' ? 'selected' : '' }}>Bán chạy</option>
+                        <option value="bestseller" {{ request('sort') == 'bestseller' ? 'selected' : '' }}>Bán chạy
+                        </option>
                     </select>
                 </div>
 
@@ -73,7 +80,8 @@
                             <div class="card h-100 border-0 shadow-sm rounded-4 product-card">
                                 <div class="rounded-top-4 overflow-hidden position-relative">
                                     @if ($item->sale ?? 0 > 0)
-                                        <span class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
+                                        <span
+                                            class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
                                             -{{ $item->sale }}%
                                         </span>
                                     @endif
@@ -112,7 +120,8 @@
                             <div class="card h-100 shadow-sm rounded-3 product-card">
                                 <div class="position-relative overflow-hidden rounded-top-3">
                                     @if ($item->sale ?? 0 > 0)
-                                        <span class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
+                                        <span
+                                            class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">
                                             -{{ $item->sale }}%
                                         </span>
                                     @endif
@@ -143,7 +152,7 @@
             {{-- Phân trang --}}
             <div class="d-flex justify-content-center mt-4">
                 @if (isset($products) && method_exists($products, 'withQueryString'))
-                    {{ $products->withQueryString()->links() }}
+                    {{ $products->withQueryString()->links('pagination::bootstrap-5') }}
                 @endif
             </div>
         </div>
@@ -156,25 +165,25 @@
             background: var(--bg-light);
             border-radius: 10px;
             padding: 15px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         [data-theme="dark"] .filter-bar {
             background: #1e293b;
-            box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+            box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
         }
 
         .filter-bar .form-select,
         .filter-bar .btn {
             border-radius: 8px;
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             transition: 0.2s;
         }
 
         [data-theme="dark"] .filter-bar .form-select {
             background: #0f172a;
             color: #e2e8f0;
-            border-color: rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         [data-theme="dark"] .filter-bar .form-select option {
@@ -202,23 +211,6 @@
             color: #fff;
         }
 
-        /* ===================== TIÊU ĐỀ ===================== */
-        .section-title {
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--text-dark);
-        }
-
-        [data-theme="dark"] .section-title {
-            color: #e2e8f0;
-        }
-
-        .section-title i {
-            color: var(--accent-color);
-            margin-right: 8px;
-        }
-
         /* ===================== SẢN PHẨM ===================== */
         .hover-scale {
             transition: transform 0.4s ease;
@@ -240,7 +232,7 @@
 
         [data-theme="dark"] .product-card {
             background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         [data-theme="dark"] .product-title {
@@ -259,5 +251,123 @@
         [data-theme="dark"] .text-muted {
             color: #475569 !important;
         }
+
+        /* ===================== 🎯 PHÂN TRANG ===================== */
+       /* ===================== 🎯 PHÂN TRANG NÂNG CẤP ===================== */
+.pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 2rem;
+    font-weight: 500;
+}
+
+.pagination .page-item {
+    display: inline-block;
+}
+
+.pagination .page-item .page-link {
+    border: none;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    transition: all 0.25s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Hover & focus */
+.pagination .page-item .page-link:hover,
+.pagination .page-item .page-link:focus {
+    background: #2563eb;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* Active */
+.pagination .page-item.active .page-link {
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* Disabled */
+.pagination .page-item.disabled .page-link {
+    background: #e2e8f0;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* Ẩn dòng thông báo kết quả */
+.pagination ~ p {
+    display: none !important;
+}
+
+/* DARK MODE */
+[data-theme="dark"] .pagination .page-item .page-link {
+    background: #1e293b;
+    color: #e2e8f0;
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .pagination .page-item .page-link:hover {
+    background: #3b82f6;
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
+}
+
+[data-theme="dark"] .pagination .page-item.active .page-link {
+    background: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+}
+
+[data-theme="dark"] .pagination .page-item.disabled .page-link {
+    background: #334155;
+    color: #64748b;
+}
+
+/* Bo góc mượt và spacing hài hòa */
+.pagination .page-link {
+    min-width: 38px;
+    text-align: center;
+}
+.pagination ~ p {
+    display: none !important;
+}
+
     </style>
+
+    {{-- ⚡ AJAX PHÂN TRANG (không reload trang) --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+    <script>
+        // Xử lý khi bấm phân trang (AJAX)
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            let url = $(this).attr('href');
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function(response) {
+                    // Render lại vùng danh sách sản phẩm
+                    let html = $(response).find('#product-list').html();
+                    $('#product-list').html(html);
+                    window.scrollTo({
+                        top: 300,
+                        behavior: 'smooth'
+                    });
+                },
+                error: function() {
+                    alert('Không thể tải dữ liệu, vui lòng thử lại.');
+                }
+            });
+        });
+    </script>
 @endsection
