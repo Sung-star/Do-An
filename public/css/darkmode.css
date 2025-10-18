@@ -1,0 +1,319 @@
+/* 🌙 Toàn site nền tối */
+[data-theme="dark"] {
+  background-color: #0d1117;
+  color: #f1f5f9;
+}
+
+/* Header / Navbar */
+[data-theme="dark"] header,
+[data-theme="dark"] .navbar {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .navbar a {
+  color: #f9fafb !important;
+}
+
+/* Các khối nền trắng đổi sang xám */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .card,
+[data-theme="dark"] .shadow-sm,
+[data-theme="dark"] .shadow-lg {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+/* Cố định màu chữ */
+[data-theme="dark"] .text-dark,
+[data-theme="dark"] .text-muted {
+  color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .text-gradient {
+  background: linear-gradient(90deg, #f9fafb, #d1d5db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Giá sản phẩm nổi bật */
+[data-theme="dark"] .price-display {
+  color: #f87171 !important;
+}
+
+/* Sửa lỗi chữ bị che trong banner / slider */
+[data-theme="dark"] .carousel-caption,
+[data-theme="dark"] .banner-text,
+[data-theme="dark"] .carousel-item h2,
+[data-theme="dark"] .carousel-item p {
+  color: #fff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  z-index: 10;
+  position: relative;
+}
+
+/* Làm mờ nhẹ background overlay của banner */
+[data-theme="dark"] .carousel-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+/* Form, input */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] input,
+[data-theme="dark"] select {
+  background-color: #334155 !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+/* Nút outline */
+[data-theme="dark"] .btn-outline-dark {
+  color: #f1f5f9 !important;
+  border-color: #64748b !important;
+}
+
+[data-theme="dark"] .btn-outline-dark:hover {
+  background-color: #475569 !important;
+}
+
+/* Màu icon */
+[data-theme="dark"] i,
+[data-theme="dark"] svg {
+  color: #f1f5f9 !important;
+}
+
+/* Footer */
+[data-theme="dark"] footer {
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+}
+/* 🩶 Dropdown trong dark mode */
+[data-theme="dark"] .dropdown-menu {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+[data-theme="dark"] .dropdown-menu .dropdown-item {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .dropdown-menu .dropdown-item:hover {
+  background-color: #334155 !important;
+  color: #fff !important;
+}
+    /* 🛠️ Fix lệch chữ "Khuyến mãi siêu hot" — luôn căn giữa ngang, nằm dưới ảnh */
+[data-theme="dark"] .carousel-item {
+  position: relative !important;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .carousel-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35); /* lớp phủ nhẹ khi dark mode */
+  z-index: 1;
+}
+
+/* ✅ Caption luôn nằm giữa ngang, gần dưới ảnh */
+[data-theme="dark"] .carousel-caption {
+  position: absolute !important;
+  bottom: 30px; /* cách mép dưới 30px, bạn có thể tăng giảm tùy ý */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2 !important;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  color: #fff !important;
+  width: auto;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+/* 🎨 Đồng bộ phần lọc + tiêu đề + sản phẩm nổi bật giữa 2 chế độ */
+
+/* Vùng bộ lọc */
+.filter-bar {
+  background: var(--bg-light);
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.filter-bar .form-select,
+.filter-bar .btn {
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.1);
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.filter-bar .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+.filter-bar .btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.filter-bar .btn-outline-primary:hover {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+/* DARK MODE */
+[data-theme="dark"] .filter-bar {
+  background: #1e293b;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+}
+
+[data-theme="dark"] .filter-bar .form-select,
+[data-theme="dark"] .filter-bar .btn {
+  background: #0f172a;
+  border-color: rgba(255,255,255,0.1);
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .filter-bar .form-select option {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .filter-bar .btn-outline-primary {
+  color: #60a5fa;
+  border-color: #60a5fa;
+}
+
+[data-theme="dark"] .filter-bar .btn-outline-primary:hover {
+  background: #60a5fa;
+  color: #fff;
+}
+
+/* Tiêu đề SẢN PHẨM NỔI BẬT */
+.section-title {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+}
+
+.section-title i {
+  color: var(--accent-color);
+  margin-right: 6px;
+}
+
+[data-theme="dark"] .section-title {
+  color: #e2e8f0;
+}
+/* ====================== 🔍 THANH TÌM KIẾM ====================== */
+.search-bar {
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+}
+
+.search-bar .form-control {
+  border-radius: 25px 0 0 25px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 8px 15px;
+  transition: 0.3s;
+  background: #fff;
+  color: #111;
+}
+
+.search-bar .form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+  outline: none;
+}
+
+.search-bar .btn {
+  border-radius: 0 25px 25px 0;
+  background: var(--accent-color);
+  color: #000;
+  font-weight: 600;
+  border: none;
+  transition: 0.3s;
+}
+
+.search-bar .btn:hover {
+  background: #ffc107;
+}
+
+/* 🌙 DARK MODE SEARCH BAR */
+[data-theme="dark"] .search-bar .form-control {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .search-bar .form-control::placeholder {
+  color: #94a3b8; /* placeholder nhạt nhẹ */
+}
+
+[data-theme="dark"] .search-bar .btn {
+  background: #60a5fa;
+  color: #fff;
+}
+
+[data-theme="dark"] .search-bar .btn:hover {
+  background: #3b82f6;
+}
+
+/* ====================== 🛒 NÚT GIỎ HÀNG ====================== */
+.btn-cart {
+  background: #fff;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #000;
+  transition: 0.3s;
+}
+
+.btn-cart:hover {
+  background: var(--accent-color);
+  color: #000;
+}
+
+/* 🌙 DARK MODE GIỎ HÀNG */
+[data-theme="dark"] .btn-cart {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .btn-cart:hover {
+  background: #60a5fa;
+  color: #fff;
+}
+
+/* Huy hiệu số lượng giỏ hàng */
+.btn-cart .badge {
+  background: #ff3333;
+  font-size: 0.7rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+/* 🌙 DARK MODE — badge giỏ hàng nổi bật hơn */
+[data-theme="dark"] .btn-cart .badge {
+  background: #f87171;
+  color: #fff;
+  box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
+}

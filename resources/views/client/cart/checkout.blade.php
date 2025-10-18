@@ -110,48 +110,61 @@
                     <div class="card p-4 shadow-sm rounded-4">
                         <h5 class="mb-3">📦 Chi tiết đơn hàng</h5>
                         <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Sản phẩm</th>
-                                    <th>SL</th>
-                                    <th>Giá</th>
-                                    <th>T.Tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($cart as $item)
-                                    @php
-                                        // ✅ SỬA: Kiểm tra key 'price' có tồn tại không
-                                        $price = $item['price'] ?? 0;
-                                        $quantity = $item['quantity'] ?? 1;
-                                        $subtotal = $price * $quantity;
-                                        $total += $subtotal;
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Sản phẩm</th>
+            <th>SL</th>
+            <th>Giá</th>
+            <th>T.Tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse ($cart as $item)
+            @php
+                $price = $item['price'] ?? 0;
+                $quantity = $item['quantity'] ?? 1;
+                $subtotal = $price * $quantity;
+                $total += $subtotal;
 
-                                        // Lấy tên sản phẩm (có thể là 'proname' hoặc 'name')
-                                        $productName = $item['name'] ?? ($item['proname'] ?? 'Sản phẩm');
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $productName }}</td>
-                                        <td>{{ $quantity }}</td>
-                                        <td>{{ number_format($price) }}đ</td>
-                                        <td class="text-danger">{{ number_format($subtotal) }}đ</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">Giỏ hàng của bạn đang trống</td>
-                                    </tr>
-                                @endforelse
+                $productName = $item['proname'] ?? ($item['name'] ?? 'Sản phẩm');
+                $color = $item['color'] ?? null;
+                $version = $item['version'] ?? null;
+            @endphp
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>
+                    {{ $productName }}
+                    @if ($color || $version)
+                        <div class="small text-muted">
+                            @if ($color)
+                                Màu: <strong>{{ $color }}</strong>
+                            @endif
+                            @if ($version)
+                                • Phiên bản: <strong>{{ $version }}</strong>
+                            @endif
+                        </div>
+                    @endif
+                </td>
+                <td>{{ $quantity }}</td>
+                <td>{{ number_format($price) }}đ</td>
+                <td class="text-danger">{{ number_format($subtotal) }}đ</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5" class="text-center">Giỏ hàng của bạn đang trống</td>
+            </tr>
+        @endforelse
 
-                                @if (!empty($cart))
-                                    <tr class="fw-bold">
-                                        <td colspan="4" class="text-end">Tổng tiền:</td>
-                                        <td class="text-danger">{{ number_format($total) }}đ</td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
+        @if (!empty($cart))
+            <tr class="fw-bold">
+                <td colspan="4" class="text-end">Tổng tiền:</td>
+                <td class="text-danger">{{ number_format($total) }}đ</td>
+            </tr>
+        @endif
+    </tbody>
+</table>
+
                     </div>
                 </div>
 

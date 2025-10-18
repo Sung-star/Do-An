@@ -13,27 +13,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // ======================
-        // Thống kê tổng quan
-        // ======================
+        // Tổng quan
         $totalProducts  = Product::count();
         $totalOrders    = Order::count();
         $totalCustomers = Customer::count();
 
-        // ======================
-        // Doanh thu hôm nay (tính từ order_items)
-        // ======================
+        // Doanh thu hôm nay
         $todayRevenue = Order::where('status', 'Hoàn thành')
             ->whereDate('created_at', Carbon::today())
             ->with('items')
             ->get()
-            ->sum(function ($order) {
-                return $order->items->sum(fn($item) => $item->quantity * $item->price);
-            });
+            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
 
-        // ======================
-        // Dữ liệu bảng hiển thị
-        // ======================
+        // Dữ liệu hiển thị
         $latestProducts = Product::latest()->take(5)->get();
 
         $latestOrders = Order::with('customer')
@@ -47,69 +39,48 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // ======================
-        // Doanh thu theo tháng (năm hiện tại)
-        // ======================
+        // Doanh thu theo tháng
         $monthlyRevenue = Order::where('status', 'Hoàn thành')
             ->whereYear('created_at', Carbon::now()->year)
             ->with('items')
             ->get()
             ->groupBy(fn($order) => $order->created_at->format('m'))
-            ->map(function ($orders) {
-                return $orders->sum(function ($order) {
-                    return $order->items->sum(fn($item) => $item->quantity * $item->price);
-                });
-            });
+            ->map(fn($orders) => $orders->sum(
+                fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price)
+            ));
 
-        // ======================
-        // 🔢 Tính tăng trưởng % so với tháng trước
-        // ======================
+        // Tăng trưởng %
         $thisMonth = Carbon::now()->month;
         $lastMonth = Carbon::now()->subMonth()->month;
         $year = Carbon::now()->year;
 
-        // 1️⃣ Sản phẩm tạo trong tháng
-        $productThisMonth = Product::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
-        $productLastMonth = Product::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
-        $growthProducts = $this->calcGrowth($productThisMonth, $productLastMonth);
-
-        // 2️⃣ Đơn hàng trong tháng
-        $orderThisMonth = Order::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
-        $orderLastMonth = Order::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
-        $growthOrders = $this->calcGrowth($orderThisMonth, $orderLastMonth);
-
-        // 3️⃣ Khách hàng mới trong tháng
-        $customerThisMonth = Customer::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count();
-        $customerLastMonth = Customer::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count();
-        $growthCustomers = $this->calcGrowth($customerThisMonth, $customerLastMonth);
-
-        // 4️⃣ Doanh thu tháng này vs tháng trước
-        $revenueThisMonth = Order::where('status', 'Hoàn thành')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $thisMonth)
-            ->with('items')
-            ->get()
-            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
-
-        $revenueLastMonth = Order::where('status', 'Hoàn thành')
-            ->whereYear('created_at', $year)
-            ->whereMonth('created_at', $lastMonth)
-            ->with('items')
-            ->get()
-            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
-
-        $growthRevenue = $this->calcGrowth($revenueThisMonth, $revenueLastMonth);
-
         $growthData = [
-            'products' => $growthProducts,
-            'orders' => $growthOrders,
-            'customers' => $growthCustomers,
-            'revenue' => $growthRevenue
+            'products'  => $this->calcGrowth(
+                Product::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count(),
+                Product::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count()
+            ),
+            'orders'    => $this->calcGrowth(
+                Order::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count(),
+                Order::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count()
+            ),
+            'customers' => $this->calcGrowth(
+                Customer::whereYear('created_at', $year)->whereMonth('created_at', $thisMonth)->count(),
+                Customer::whereYear('created_at', $year)->whereMonth('created_at', $lastMonth)->count()
+            ),
+            'revenue'   => $this->calcGrowth(
+                $this->getRevenue($year, $thisMonth),
+                $this->getRevenue($year, $lastMonth)
+            )
         ];
 
-        // ======================
-        // Trả về view dashboard
-        // ======================
+        // Cards
+        $cards = [
+            ['title' => 'Tổng sản phẩm', 'value' => $totalProducts,  'icon' => 'bi-box-seam', 'color' => 'primary', 'growth' => $growthData['products'],  'route' => 'pro2.index'],
+            ['title' => 'Tổng đơn hàng', 'value' => $totalOrders,    'icon' => 'bi-receipt',  'color' => 'success', 'growth' => $growthData['orders'],    'route' => 'ad.orders.index'],
+            ['title' => 'Tổng khách hàng', 'value' => $totalCustomers, 'icon' => 'bi-people-fill', 'color' => 'warning', 'growth' => $growthData['customers'], 'route' => 'ad.customers.index'],
+            ['title' => 'Doanh thu hôm nay', 'value' => $todayRevenue, 'icon' => 'bi-graph-up-arrow', 'color' => 'danger', 'growth' => $growthData['revenue'], 'route' => 'report.revenue'],
+        ];
+
         return view('admin.dashboard', compact(
             'totalProducts',
             'totalOrders',
@@ -119,18 +90,25 @@ class DashboardController extends Controller
             'latestOrders',
             'pendingOrders',
             'monthlyRevenue',
-            'growthData' // ✅ truyền sang view
+            'growthData',
+            'cards'
         ));
     }
 
-    /**
-     * Hàm tính phần trăm tăng trưởng
-     */
     private function calcGrowth($current, $previous)
     {
-        if ($previous == 0 && $current > 0) return 100; // tăng đột biến
+        if ($previous == 0 && $current > 0) return 100;
         if ($previous == 0 && $current == 0) return 0;
-        $change = (($current - $previous) / $previous) * 100;
-        return round($change, 1);
+        return round((($current - $previous) / $previous) * 100, 1);
+    }
+
+    private function getRevenue($year, $month)
+    {
+        return Order::where('status', 'Hoàn thành')
+            ->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->with('items')
+            ->get()
+            ->sum(fn($order) => $order->items->sum(fn($item) => $item->quantity * $item->price));
     }
 }

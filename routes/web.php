@@ -24,7 +24,9 @@ use App\Http\Controllers\ReviewController;
 
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Client\AuthController;
-
+//Cart
+Route::get('/cart/delete/{key}', [CartController::class, 'del'])->name('cartdel');
+Route::post('/cart/update/{key}', [CartController::class, 'updateQty'])->name('cart.updateQty');
 
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 

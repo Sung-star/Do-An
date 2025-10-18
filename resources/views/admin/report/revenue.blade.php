@@ -38,7 +38,7 @@
 
     {{-- Danh sách đơn hàng --}}
     <h4 class="mt-5">📦 Danh sách Đơn hàng</h4>
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped text-center align-middle">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
@@ -51,18 +51,20 @@
         <tbody>
             @forelse($orders as $order)
                 <tr>
-                    <td>{{ $order->id }}</td>
-                    <td>{{ $order->customer->fullname ?? 'Khách lẻ' }}</td>
+                    <td><strong>#{{ $order->id }}</strong></td>
+                    <td>{{ $order->customer_name ?? $order->customer->fullname ?? 'Khách lẻ' }}</td>
                     <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                     <td>
                         <span class="badge 
                             @if($order->status === 'Hoàn thành') bg-success
-                            @elseif($order->status === 'Chờ xử lý') bg-warning
+                            @elseif($order->status === 'Chờ xử lý') bg-warning text-dark
+                            @elseif($order->status === 'Đang xử lý') bg-info
+                            @elseif($order->status === 'Đã hủy') bg-danger
                             @else bg-secondary @endif">
-                            {{ $order->status }}
+                            {{ $order->status ?? 'Không xác định' }}
                         </span>
                     </td>
-                    <td>{{ number_format($order->total_amount, 0, ',', '.') }} đ</td>
+                    <td class="text-danger fw-bold">{{ number_format($order->total_amount, 0, ',', '.') }} đ</td>
                 </tr>
             @empty
                 <tr>

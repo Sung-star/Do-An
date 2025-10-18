@@ -11,15 +11,19 @@
             <h3 class="mb-4 text-primary fw-bold">🛒 Giỏ hàng của bạn</h3>
 
             @if (count($cart) == 0)
-                <div class="alert alert-warning">Chưa có sản phẩm nào trong giỏ hàng!</div>
+                <div class="alert alert-warning text-center py-4 rounded-3 shadow-sm">
+                    Chưa có sản phẩm nào trong giỏ hàng!
+                </div>
             @else
                 <div class="table-responsive shadow-sm rounded-4 overflow-hidden">
-                    <table class="table align-middle text-center">
+                    <table class="table align-middle text-center mb-0">
                         <thead class="table-dark">
                             <tr>
                                 <th>STT</th>
-                                <th>Hình sản phẩm</th>
+                                <th>Hình</th>
                                 <th>Sản phẩm</th>
+                                <th>Màu sắc</th>
+                                <th>Phiên bản</th>
                                 <th>Số lượng</th>
                                 <th>Giá</th>
                                 <th>Thành tiền</th>
@@ -36,18 +40,19 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
                                         @php
-                                            $hasImage = isset($item['fileName']) && $item['fileName'] != '';
-                                            $imagePath = $hasImage
+                                            $image = $item['fileName']
                                                 ? asset('storage/products/' . $item['fileName'])
                                                 : asset('images/no-image.png');
                                         @endphp
-                                        <img src="{{ $imagePath }}" width="70" height="70" style="object-fit: cover;"
-                                            class="rounded-2" />
+                                        <img src="{{ $image }}" width="70" height="70" class="rounded-2" style="object-fit: cover;">
                                     </td>
 
-                                    <td>{{ $item['proname'] }}</td>
+                                    <td class="fw-semibold text-start">{{ $item['proname'] }}</td>
+                                    <td>{{ $item['color'] ?? '—' }}</td>
+                                    <td>{{ $item['version'] ?? '—' }}</td>
+
                                     <td style="width: 160px;">
-                                        <form action="{{ route('cart.updateQty', $item['productid']) }}" method="POST"
+                                        <form action="{{ route('cart.updateQty', $item['key']) }}" method="POST"
                                             class="d-flex justify-content-center align-items-center">
                                             @csrf
                                             <button type="submit" name="action" value="decrease"
@@ -58,24 +63,28 @@
                                                 class="btn btn-sm btn-outline-secondary">+</button>
                                         </form>
                                     </td>
+
                                     <td>{{ number_format($item['price']) }}đ</td>
                                     <td class="text-danger fw-semibold">{{ number_format($subtotal) }}đ</td>
+
                                     <td>
-                                        <a href="{{ route('cartdel', ['id' => $item['productid']]) }}"
-                                            class="btn btn-sm btn-outline-danger">Xóa</a>
+                                        <a href="{{ route('cartdel', ['key' => $item['key']]) }}"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?')">Xóa</a>
                                     </td>
                                 </tr>
                             @endforeach
                             <tr class="fw-bold table-light">
-                                <td colspan="5" class="text-end">Tổng cộng</td>
-                                <td class="text-danger">{{ number_format($total) }}đ</td>
+                                <td colspan="7" class="text-end">Tổng cộng</td>
+                                <td class="text-danger fs-5">{{ number_format($total) }}đ</td>
                                 <td></td>
                             </tr>
                             <tr>
-                            <td colspan="7" class="text-end">
-    <a href="{{ route('checkout') }}" class="btn btn-success btn-lg me-2">🧾 Tiến hành đặt hàng</a>
-</td>
-
+                                <td colspan="9" class="text-end">
+                                    <a href="{{ route('checkout') }}" class="btn btn-success btn-lg me-2">
+                                        🧾 Tiến hành đặt hàng
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,4 +92,35 @@
             @endif
         </div>
     </section>
+
+    <style>
+        [data-theme="dark"] .table-dark {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .table-light {
+            background: #1e293b !important;
+            color: #f8fafc !important;
+        }
+
+        [data-theme="dark"] .btn-outline-danger {
+            color: #f87171;
+            border-color: #ef4444;
+        }
+
+        [data-theme="dark"] .btn-outline-danger:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        [data-theme="dark"] .btn-success {
+            background: #22c55e !important;
+        }
+
+        [data-theme="dark"] .alert-warning {
+            background: #facc15 !important;
+            color: #000 !important;
+        }
+    </style>
 @endsection

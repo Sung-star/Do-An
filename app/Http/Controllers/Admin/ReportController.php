@@ -13,15 +13,19 @@ class ReportController extends Controller
      */
     public function index()
     {
-        $orders = Order::with(['customer', 'items'])->latest()->get();
+        $orders = Order::with(['customer', 'items'])
+            ->orderByDesc('created_at')
+            ->get();
 
         // Doanh thu hôm nay (chỉ tính đơn hoàn thành)
-        $todayRevenue = $orders->where('status', 'Hoàn thành')
+        $todayRevenue = $orders
+            ->where('status', 'Hoàn thành')
             ->where('created_at', '>=', Carbon::today())
             ->sum(fn($order) => $order->total_amount);
 
         // Tổng doanh thu (chỉ tính đơn hoàn thành)
-        $totalRevenue = $orders->where('status', 'Hoàn thành')
+        $totalRevenue = $orders
+            ->where('status', 'Hoàn thành')
             ->sum(fn($order) => $order->total_amount);
 
         // Số đơn đã hoàn thành

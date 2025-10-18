@@ -25,7 +25,7 @@
                     @forelse ($orders as $order)
                         <tr>
                             <td><strong>#{{ $order->id }}</strong></td>
-                            <td>{{ $order->customer->fullname ?? 'Không rõ' }}</td>
+                            <td>{{ $order->customer_name ?? ($order->customer->fullname ?? '—') }}</td>
                             <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
 
                             {{-- ✅ Hiển thị trạng thái --}}
@@ -54,7 +54,7 @@
                             </td>
 
                             <td><span class="badge bg-success">{{ $order->items->count() }} sản phẩm</span></td>
-                            
+
                             <td>{{ $order->description ?? 'Không có ghi chú' }}</td>
                             <td>
                                 <a href="{{ route('ad.orders.show', $order->id) }}" class="btn btn-sm btn-info text-white">

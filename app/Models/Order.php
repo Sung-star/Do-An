@@ -6,39 +6,41 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    // Các trường được gán hàng loạt
     protected $fillable = [
+        'coupon_id',
         'customerid',
+        'order_status_id',
+        'order_approved_at',
+        'order_delivered_carrier_date',
+        'order_delivered_customer_date',
+        'created_at',
+        'updated_by',
+        'payment_method',
+        'status',
+        'total_amount',
         'description',
-        'status',   // Trạng thái đơn
-        'payment_method',   // 👈 thêm dòng này
-
+        // ✅ Thêm thông tin khách hàng snapshot
+        'customer_name',
+        'customer_phone',
+        'customer_email',
+        'customer_address',
     ];
 
-    /**
-     * Quan hệ tới khách hàng
-     */
+    // ✅ Quan hệ khách hàng
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customerid', 'id');
     }
 
-    /**
-     * Quan hệ tới các sản phẩm trong đơn hàng
-     */
+    // ✅ Quan hệ sản phẩm
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'orderid', 'id');
     }
 
-    /**
-     * Accessor: tính tổng tiền từ các item
-     * -> $order->total_amount sẽ trả về tổng
-     */
+    // ✅ Tổng tiền
     public function getTotalAmountAttribute()
     {
-        return $this->items->sum(function ($item) {
-            return $item->quantity * $item->price;
-        });
+        return $this->items->sum(fn($item) => $item->quantity * $item->price);
     }
 }
