@@ -25,4 +25,10 @@ RUN echo "<Directory /var/www/html/public>\n\
 </Directory>" >> /etc/apache2/apache2.conf
 
 # Phân quyền cho storage và cache
-RUN chown -R www-data:www-
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Mở cổng 80 cho Render
+EXPOSE 80
+
+# Khởi động Apache
+CMD ["apache2-foreground"]
