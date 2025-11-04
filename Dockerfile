@@ -1,24 +1,28 @@
-# 1️⃣ Sử dụng image PHP có Apache sẵn
+# ------------------------------
+# ✅ PHP + Apache cho Laravel
+# ------------------------------
 FROM php:8.2-apache
 
-# 2️⃣ Cài các extension Laravel cần
+# Cài extension cần thiết cho Laravel
 RUN docker-php-ext-install pdo pdo_mysql
 
-# 3️⃣ Copy toàn bộ project vào container
+# Copy toàn bộ mã nguồn vào container
 COPY . /var/www/html
 
-# 4️⃣ Trỏ DocumentRoot về thư mục public
+# Đặt thư mục làm việc
 WORKDIR /var/www/html
 
-# 5️⃣ Cấu hình Apache trỏ đến public/
+# Thay đổi DocumentRoot để Apache trỏ vào public/
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-# 6️⃣ Mở rewrite để Laravel hoạt động (route)
+# Bật module rewrite để Laravel hoạt động
 RUN a2enmod rewrite
+
+# Cho phép .htaccess override cấu hình
 RUN echo "<Directory /var/www/html/public>\n\
     AllowOverride All\n\
+    Require all granted\n\
 </Directory>" >> /etc/apache2/apache2.conf
 
-# 7️⃣ Cổng Render sử dụng
-EXPOSE 80
-CMD ["apache2-foreground"]
+# Phân quyền cho storage và cache
+RUN chown -R www-data:www-
