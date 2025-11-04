@@ -5,6 +5,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>HS Store</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
@@ -363,6 +364,39 @@
                 background: #f87171;
                 box-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
             }
+
+            /* 🌙 Cập nhật màu thực tế cho body và text khi dark mode bật */
+            [data-theme="dark"] body {
+                background-color: var(--bg-dark) !important;
+                color: var(--text-light) !important;
+            }
+
+            /* Toàn bộ văn bản */
+            [data-theme="dark"] h1,
+            [data-theme="dark"] h2,
+            [data-theme="dark"] h3,
+            [data-theme="dark"] p,
+            [data-theme="dark"] li,
+            [data-theme="dark"] a,
+            [data-theme="dark"] span,
+            [data-theme="dark"] strong {
+                color: var(--text-light) !important;
+            }
+
+            /* Nền các section chính */
+            [data-theme="dark"] main,
+            [data-theme="dark"] section {
+                background-color: var(--bg-dark);
+                color: var(--text-light);
+            }
+
+            /* Thẻ card hoặc div container */
+            [data-theme="dark"] .card,
+            [data-theme="dark"] .contact-container,
+            [data-theme="dark"] .team-member {
+                background-color: #1e293b !important;
+                color: #e2e8f0 !important;
+            }
         </style>
     </head>
 
@@ -377,8 +411,8 @@
                 </a>
 
                 <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -392,7 +426,8 @@
                     </ul>
 
                     <form action="{{ route('client.products.search') }}" method="GET" class="d-flex search-bar me-3">
-                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm..." required>
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm sản phẩm..."
+                            required>
                         <button class="btn" type="submit"><i class="bi bi-search"></i></button>
                     </form>
 
@@ -407,8 +442,8 @@
                     <ul class="navbar-nav">
                         @auth
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle"></i> {{ Auth::user()->username }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -428,7 +463,8 @@
                             </li>
                         @else
                             <li class="nav-item">
-                                <a href="{{ route('login') }}" class="nav-link text-white"><i class="bi bi-person"></i> Đăng
+                                <a href="{{ route('login') }}" class="nav-link text-white"><i class="bi bi-person"></i>
+                                    Đăng
                                     nhập</a>
                             </li>
                         @endauth
@@ -443,14 +479,16 @@
                 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner rounded-4 shadow">
                         <div class="carousel-item active">
-                            <img src="{{ asset('storage/banner/banner1.png') }}" class="d-block w-100" alt="Banner 1">
+                            <img src="{{ asset('storage/banner/banner1.png') }}" class="d-block w-100"
+                                alt="Banner 1">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>🔥 Khuyến mãi siêu hot!</h2>
                                 <p>Giảm giá tới 40% cho Laptop Gaming tuần này!</p>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ asset('storage/banner/banner2.png') }}" class="d-block w-100" alt="Banner 2">
+                            <img src="{{ asset('storage/banner/banner2.png') }}" class="d-block w-100"
+                                alt="Banner 2">
                             <div class="carousel-caption d-none d-md-block">
                                 <h2>🎧 Tai nghe chính hãng</h2>
                                 <p>Trải nghiệm âm thanh đỉnh cao – giá siêu ưu đãi!</p>
@@ -548,6 +586,7 @@
 
         @stack('scripts')
         <script></script>
+        <script src="{{ asset('js/chatbot.js') }}"></script>
 
     </body>
 

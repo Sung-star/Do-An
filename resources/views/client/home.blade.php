@@ -253,99 +253,99 @@
         }
 
         /* ===================== 🎯 PHÂN TRANG ===================== */
-       /* ===================== 🎯 PHÂN TRANG NÂNG CẤP ===================== */
-.pagination {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 2rem;
-    font-weight: 500;
-}
+        /* ===================== 🎯 PHÂN TRANG NÂNG CẤP ===================== */
+        .pagination {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
 
-.pagination .page-item {
-    display: inline-block;
-}
+        .pagination .page-item {
+            display: inline-block;
+        }
 
-.pagination .page-item .page-link {
-    border: none;
-    border-radius: 10px;
-    background: #f8fafc;
-    color: #1e293b;
-    font-size: 0.95rem;
-    font-weight: 500;
-    padding: 8px 14px;
-    transition: all 0.25s ease-in-out;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
+        .pagination .page-item .page-link {
+            border: none;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 14px;
+            transition: all 0.25s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
 
-/* Hover & focus */
-.pagination .page-item .page-link:hover,
-.pagination .page-item .page-link:focus {
-    background: #2563eb;
-    color: #fff;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
-}
+        /* Hover & focus */
+        .pagination .page-item .page-link:hover,
+        .pagination .page-item .page-link:focus {
+            background: #2563eb;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+        }
 
-/* Active */
-.pagination .page-item.active .page-link {
-    background: #2563eb;
-    color: #fff;
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
-}
+        /* Active */
+        .pagination .page-item.active .page-link {
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+        }
 
-/* Disabled */
-.pagination .page-item.disabled .page-link {
-    background: #e2e8f0;
-    color: #94a3b8;
-    cursor: not-allowed;
-}
+        /* Disabled */
+        .pagination .page-item.disabled .page-link {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
 
-/* Ẩn dòng thông báo kết quả */
-.pagination ~ p {
-    display: none !important;
-}
+        /* Ẩn dòng thông báo kết quả */
+        .pagination~p {
+            display: none !important;
+        }
 
-/* DARK MODE */
-[data-theme="dark"] .pagination .page-item .page-link {
-    background: #1e293b;
-    color: #e2e8f0;
-    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.05);
-}
+        /* DARK MODE */
+        [data-theme="dark"] .pagination .page-item .page-link {
+            background: #1e293b;
+            color: #e2e8f0;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.05);
+        }
 
-[data-theme="dark"] .pagination .page-item .page-link:hover {
-    background: #3b82f6;
-    color: #fff;
-    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
-}
+        [data-theme="dark"] .pagination .page-item .page-link:hover {
+            background: #3b82f6;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(59, 130, 246, 0.25);
+        }
 
-[data-theme="dark"] .pagination .page-item.active .page-link {
-    background: #3b82f6;
-    color: #fff;
-    font-weight: 600;
-}
+        [data-theme="dark"] .pagination .page-item.active .page-link {
+            background: #3b82f6;
+            color: #fff;
+            font-weight: 600;
+        }
 
-[data-theme="dark"] .pagination .page-item.disabled .page-link {
-    background: #334155;
-    color: #64748b;
-}
+        [data-theme="dark"] .pagination .page-item.disabled .page-link {
+            background: #334155;
+            color: #64748b;
+        }
 
-/* Bo góc mượt và spacing hài hòa */
-.pagination .page-link {
-    min-width: 38px;
-    text-align: center;
-}
-.pagination ~ p {
-    display: none !important;
-}
+        /* Bo góc mượt và spacing hài hòa */
+        .pagination .page-link {
+            min-width: 38px;
+            text-align: center;
+        }
 
+        .pagination~p {
+            display: none !important;
+        }
     </style>
 
     {{-- ⚡ AJAX PHÂN TRANG (không reload trang) --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         // Xử lý khi bấm phân trang (AJAX)
         $(document).on('click', '.pagination a', function(event) {

@@ -1,27 +1,32 @@
-# PHP với FPM
-FROM php:8.2-fpm
+# ---------- BƯỚC 1: Build Laravel ----------
+FROM composer:2 AS build
 
-# Cài đặt các package cần thiết
-RUN apt-get update && apt-get install -y \
-    git zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev curl libpq-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
+WORKDIR /app
+COPY . /app
 
-# Sao chép project
-WORKDIR /var/www/html
-COPY . .
-
-# Cài composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
-
-# Cài các thư viện PHP
+# Cài các thư viện PHP cần thiết
 RUN composer install --no-dev --optimize-autoloader
 
-# Phân quyền
+# ---------- BƯỚC 2: Tạo image chạy ứng dụng ----------
+FROM php:8.2-apache
+
+# Cài các extension cần thiết cho Laravel
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Copy mã Laravel từ image build
+COPY --from=build /app /var/www/html
+
+# Thiết lập quyền
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Mở port web
-EXPOSE 8000
+# Copy file cấu hình Apache
+COPY ./docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 
-# Sử dụng start.sh làm entrypoint (tự migrate + seed + start server)
-CMD ["sh", "start.sh"]
+# Bật rewrite module cho Laravel route
+RUN a2enmod rewrite
+
+EXPOSE 8080
+
+CMD ["apache2-foreground"]

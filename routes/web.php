@@ -1,6 +1,6 @@
 <?php
 // trigger artisan cache clear
-
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\Brand2Controller;
 use App\Http\Controllers\Admin\CategoryController;
@@ -24,6 +24,8 @@ use App\Http\Controllers\ReviewController;
 
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Client\AuthController;
+//Chat AI
+Route::post('/chat', [ChatbotController::class, 'chat']);
 //Cart
 Route::get('/cart/delete/{key}', [CartController::class, 'del'])->name('cartdel');
 Route::post('/cart/update/{key}', [CartController::class, 'updateQty'])->name('cart.updateQty');

@@ -282,6 +282,141 @@
 
     @push('scripts')
         <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const btnWishlist = document.getElementById("btnWishlist");
+                const btnCompare = document.getElementById("btnCompare");
+                const btnShare = document.getElementById("btnShare");
+                const btnCopy = document.getElementById("btnCopy");
+
+                // 🧡 1. YÊU THÍCH — lưu localStorage
+                btnWishlist.addEventListener("click", () => {
+                    const productId = "{{ $product->id ?? 0 }}";
+                    let favorites = JSON.parse(localStorage.getItem("wishlist")) || [];
+                    const exists = favorites.includes(productId);
+
+                    if (exists) {
+                        favorites = favorites.filter(id => id !== productId);
+                        localStorage.setItem("wishlist", JSON.stringify(favorites));
+                        Swal.fire({
+                            icon: "info",
+                            title: "Đã xóa khỏi danh sách yêu thích!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        btnWishlist.classList.remove("btn-primary");
+                        btnWishlist.classList.add("btn-outline-primary");
+                    } else {
+                        favorites.push(productId);
+                        localStorage.setItem("wishlist", JSON.stringify(favorites));
+                        Swal.fire({
+                            icon: "success",
+                            title: "Đã thêm vào danh sách yêu thích!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        btnWishlist.classList.remove("btn-outline-primary");
+                        btnWishlist.classList.add("btn-primary");
+                    }
+                });
+
+                // 📊 2. SO SÁNH — lưu tối đa 3 sản phẩm
+                btnCompare.addEventListener("click", () => {
+                    const product = {
+                        id: "{{ $product->id ?? 0 }}",
+                        name: "{{ $product->proname ?? '' }}",
+                        price: "{{ number_format($product->price, 0, ',', '.') }}₫"
+                    };
+                    let compareList = JSON.parse(localStorage.getItem("compareList")) || [];
+
+                    if (compareList.some(p => p.id === product.id)) {
+                        Swal.fire({
+                            icon: "info",
+                            title: "Sản phẩm đã có trong danh sách so sánh",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        return;
+                    }
+
+                    if (compareList.length >= 3) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Chỉ có thể so sánh tối đa 3 sản phẩm!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                        return;
+                    }
+
+                    compareList.push(product);
+                    localStorage.setItem("compareList", JSON.stringify(compareList));
+                    Swal.fire({
+                        icon: "success",
+                        title: "Đã thêm vào danh sách so sánh!",
+                        toast: true,
+                        position: "top-end",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                });
+
+                // 🔗 3. CHIA SẺ — mở giao diện native (nếu hỗ trợ)
+                btnShare.addEventListener("click", async () => {
+                    const shareData = {
+                        title: "{{ $product->proname ?? 'Sản phẩm HS Store' }}",
+                        text: "Hãy xem sản phẩm này tại HS Store!",
+                        url: window.location.href
+                    };
+
+                    if (navigator.share) {
+                        await navigator.share(shareData).catch(() => {});
+                    } else {
+                        navigator.clipboard.writeText(window.location.href);
+                        Swal.fire({
+                            icon: "info",
+                            title: "Đã sao chép link chia sẻ!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+
+                // 🧭 4. SAO CHÉP LINK
+                btnCopy.addEventListener("click", () => {
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Đã sao chép liên kết sản phẩm!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }).catch(() => {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Không thể sao chép link!",
+                            toast: true,
+                            position: "top-end",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    });
+                });
+            });
+        </script>
+
+        <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const qtyInput = document.getElementById('qtyInput'),
                     btnMinus = document.getElementById('btnMinus'),
@@ -399,7 +534,7 @@
                     const grid = wrap.querySelector('#recentGrid');
                     grid.innerHTML = list.map(p =>
                         `<div class="col-6 col-md-3"><a href="${p.url}" class="text-decoration-none"><div class="card h-100 border-0 shadow-sm rounded-3 hover-scale"><img src="${p.img}" class="card-img-top" style="height:200px;object-fit:cover"><div class="card-body text-center"><h6 class="text-dark mb-1 text-truncate">${p.name}</h6><div class="text-danger fw-semibold">${(p.price||0).toLocaleString('vi-VN')}đ</div></div></div></a></div>`
-                        ).join('');
+                    ).join('');
                 }
             });
         </script>
